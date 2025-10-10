@@ -172,7 +172,7 @@ const getWhatsappText = (total) => {
         const obs = item.observacoes || item.obs;
         if (obs && obs.trim() !== '') {
             const obsLimpa = obs.trim().replace(/\n/g, ' '); 
-            text += `\nObservação: ${obsLimpa}\n`;
+            text += `\n*Observações*: ${obsLimpa}\n`;
         }
         
         // Subtotal do Item
