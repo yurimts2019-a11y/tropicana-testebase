@@ -336,3 +336,215 @@ function checkStoreStatus() {
             // Lê o objeto JSON diretamente do data-attribute
             const tamanho = JSON.parse(this.dataset.tamanho.replace(/&quot;/g, '\"'));
             openModal(tamanho);
+        } catch (e) {
+            console.error("Erro ao processar dados do cartão de tamanho:", e);
+        }
+    }
+    
+    // ===================================
+    // NOVAS FUNÇÕES DE LOCAL STORAGE
+    // ===================================
+    function saveToLocalStorage() {
+        // Salva apenas o pedido. Dados de nome/bairro são salvos apenas na tela de confirmação.
+        localStorage.setItem('tropicanaPedidos', JSON.stringify(pedidos));
+    }
+
+    function loadFromLocalStorage() {
+        const pedidosJSON = localStorage.getItem('tropicanaPedidos');
+        if (pedidosJSON) {
+            pedidos = JSON.parse(pedidosJSON);
+            renderizarCardsPedidos();
+            atualizarResumoGeral();
+        }
+    }
+
+
+    // 7. ADICIONAR/SALVAR NO PEDIDO
+    function addToOrder() {
+        if (!itemAtual.tamanho.nome) return;
+
+        // ✅ CORRIGIDO: Captura o valor da observação do input
+        const obsValue = obsInput.value.trim();
+
+        // Se a quantidade é sempre 1, a lógica de itemAtual.quantity não afeta o pedido
+        itemAtual.quantity = 1; 
+
+        // Remove a chave antiga (se existir)
+        delete itemAtual.observacoes;
+        
+        // ✅ CORRIGIDO: Salva a observação no itemAtual com a chave 'obs'
+        itemAtual.obs = obsValue; 
+
+        if (itemEmEdicaoIndex !== -1) {
+            pedidos[itemEmEdicaoIndex] = JSON.parse(JSON.stringify(itemAtual));
+        } else {
+            pedidos.push(JSON.parse(JSON.stringify(itemAtual)));
+        }
+        
+        closeModal();
+        renderizarCardsPedidos();
+        atualizarResumoGeral();
+        saveToLocalStorage(); // <--- SALVA NO LOCAL STORAGE
+        
+        // NOVO: Rola a tela para o card 'Seu Pedido'
+        const targetElement = document.getElementById('seuPedidoCard');
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+
+    // 8. RENDERIZAÇÃO DO CARRINHO (TELA PRINCIPAL)
+    function renderizarCardsPedidos() {
+        cardsContainer.innerHTML = '';
+
+        if (pedidos.length === 0) {
+            cardsContainer.innerHTML = '<p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>';
+        } else {
+            pedidos.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+                card.innerHTML = `
+                    <div class="order-header">
+                        <span class="order-title">Salada #${index + 1}</span>
+                        <span class="order-price">${formatCurrency(item.total)}</span>
+                    </div>
+                    <div class="order-details">
+                        <p>Tamanho: ${item.tamanho.nome}</p>
+                        ${item.fruits.length ? `<p>Frutas (${item.fruits.length}): ${item.fruits.map(f => f.nome).join(', ')}</p>` : ''}
+                        ${item.extras.length ? `<p>Adicionais: ${item.extras.map(e => e.nome).join(', ')}</p>` : ''}
+                        ${item.acomp.length ? `<p>Acomp: ${item.acomp.map(a => a.nome).join(', ')}</p>` : ''}
+                        ${item.obs ? `<p class="order-obs">📝 Obs: ${item.obs}</p>` : ''} 
+                        </div>
+                    <div class="order-actions">
+                        <button class="btn editar-item" onclick="editItem(${index})">Editar</button>
+                        <button class="btn excluir-item" onclick="excluirItem(${index})">Excluir</button>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
+            });
+        }
+    }
+
+
+    function atualizarResumoGeral() {
+        let resumoTexto = '';
+        let totalPedido = 0;
+
+        if (pedidos.length === 0) {
+            resumoContent.textContent = 'Nenhuma Salada adicionada.';
+            totalPedido = 0;
+            // Remove o container de ações se estiver vazio
+            resumoContent.parentElement.querySelector('.resumo-actions')?.remove();
+        } else {
+            resumoTexto += pedidos.map((item, index) => {
+                const totalItem = item.total; 
+                let linha = `*1x* Salada #${index + 1} (${item.tamanho.nome}): `;
+                let detalhes = [];
+
+                if (item.fruits.length) detalhes.push(item.fruits.map(f => f.nome).join(', '));
+                if (item.extras.length) detalhes.push(`+${item.extras.map(e => e.nome).join(', ')}`);
+                if (item.acomp.length) detalhes.push(`Acomp: ${item.acomp.map(a => a.nome).join(', ')}`);
+                
+                // ✅ CORRIGIDO: Adiciona Observações ao resumo da caixa, usando a chave 'obs'
+                if (item.obs) detalhes.push(`Obs: ${item.obs}`); 
+                
+                linha += detalhes.join(' | ') + ` - ${formatCurrency(totalItem)}`;
+                totalPedido += totalItem;
+                return linha;
+            }).join('\n\n'); 
+
+            resumoContent.textContent = resumoTexto;
+            
+            adicionarBotaoConfirmarResumo(totalPedido); // <--- CHAMA NOVA FUNÇÃO
+        }
+
+        resumoContent.parentElement.classList.remove('animate');
+        void resumoContent.parentElement.offsetWidth;
+        resumoContent.parentElement.classList.add('animate');
+    }
+    
+    // NOVO: Adiciona o total e o botão 'Confirmar Pedido' na caixa de resumo
+    function adicionarBotaoConfirmarResumo(totalPedido) {
+        const resumoBox = document.querySelector('.resumo-box');
+        if (!resumoBox) return;
+
+        let container = resumoBox.querySelector('.resumo-actions');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'resumo-actions';
+            resumoBox.appendChild(container);
+        }
+        
+        let totalSpan = container.querySelector('.resumo-total-final');
+        if (!totalSpan) {
+            totalSpan = document.createElement('span');
+            totalSpan.className = 'resumo-total-final resumo-total';
+            container.appendChild(totalSpan);
+        }
+        totalSpan.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
+
+        let btnConfirmar = container.querySelector('#confirmarPedidoResumo');
+        if (!btnConfirmar) {
+            btnConfirmar = document.createElement('button');
+            btnConfirmar.id = 'confirmarPedidoResumo';
+            btnConfirmar.className = 'btn confirmar';
+            btnConfirmar.addEventListener('click', enviarPedido); // <--- CHAMA FUNÇÃO DE REDIRECIONAMENTO
+            container.appendChild(btnConfirmar);
+        }
+        
+        // Atualiza o estado de disabled
+        const isAberto = storeStatusSpan.textContent.includes('Aberto');
+        btnConfirmar.disabled = !isAberto;
+        btnConfirmar.textContent = isAberto ? 'Confirmar Pedido' : 'Loja Fechada';
+    }
+
+
+    function excluirItem(index) {
+        pedidos.splice(index, 1);
+        renderizarCardsPedidos();
+        atualizarResumoGeral();
+        saveToLocalStorage(); // <--- SALVA NO LOCAL STORAGE
+    }
+        
+    function editItem(index) {
+        // Usa o objeto de tamanho do item para abrir o modal no modo edição
+        openModal(pedidos[index].tamanho, index); 
+    }
+
+    // 9. FUNÇÃO DE ENVIO DO PEDIDO (WHATSAPP)
+    function enviarPedido() {
+        
+        if (pedidos.length === 0) {
+             alert('Adicione pelo menos um item ao pedido.');
+             return;
+        }
+        
+        // Removida a checagem de Nome e Bairro. Agora, apenas salva o pedido e redireciona.
+        saveToLocalStorage(); 
+        // window.location.href = 'confirmacao.html'; // MUDANÇA: Usa a transição
+        handlePageTransition('confirmacao.html');
+    }
+
+
+    // 11. LISTENERS E INICIALIZAÇÃO
+    window.excluirItem = excluirItem; 
+    window.openModal = openModal; 
+    window.editItem = editItem; 
+    window.handlePageTransition = handlePageTransition; // EXPOSTO PARA USO GLOBAL
+
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+        
+    modalOverlay.addEventListener('click', (e) => {
+        // Agora, o modal-overlay é a tela inteira, então o clique fora do modal-content não deve fechar.
+        // Apenas o botão 'X' deve fechar.
+    });
+
+    addToOrderBtn.addEventListener('click', addToOrder);
+    
+    // Inicialização
+    renderizarSelecaoTamanho();
+    checkStoreStatus();
+    setInterval(checkStoreStatus, 60000);
+    loadFromLocalStorage(); // <--- CARREGA O PEDIDO SALVO AO INICIAR
+});
