@@ -64,7 +64,6 @@
 
   <script>
     // A função handlePageTransition deve ser exposta globalmente em app.js
-    // Se não estiver, esta linha pode falhar, mas deve funcionar se o app.js estiver carregado primeiro
     if(typeof handlePageTransition !== 'function') {
         window.handlePageTransition = function(url) {
             document.documentElement.classList.add('fade-out');
@@ -100,23 +99,23 @@ const getWhatsappText = (total) => {
     const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
     const name = localStorage.getItem('tropicanaName') || 'Cliente';
 
-    // 1. Início da Mensagem (NOVO FORMATO LIMPO COM NEGRITO NO TÍTULO E NOME)
-    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`; // Dupla quebra para separar o título da mensagem
-    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`; // Dupla quebra para separar a introdução do primeiro item
+    // 1. Início da Mensagem
+    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`;
+    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`;
     
     // 2. Loop pelos itens do pedido
     pedidos.forEach((item, index) => {
         const precoUnitario = item.tamanho.preco;
 
-        // Título do Item - AGORA COM APENAS UMA QUEBRA DE LINHA NO FINAL
+        // Título do Item
         text += `ITEM ${index + 1}\n`; 
         
         // Tamanho e Preço
         text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
         
         // Categoria 1: Frutas (Grátis)
+        // ✅ ATUALIZADO: Checagem de item.fruits antes de .length
         if (item.fruits && item.fruits.length > 0) {
-            // Usa dupla quebra para separar o item.tamanho da categoria
             text += `\n*Frutas (Grátis):*\n`; 
             item.fruits.forEach(fruta => {
                 text += `• ${fruta.nome}\n`;
@@ -124,6 +123,7 @@ const getWhatsappText = (total) => {
         }
 
         // Categoria 2: Adicionais de Frutas (Extras Pagos)
+        // ✅ ATUALIZADO: Checagem de item.extras antes de .length
         if (item.extras && item.extras.length > 0) {
             text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
             item.extras.forEach(extra => {
@@ -132,21 +132,22 @@ const getWhatsappText = (total) => {
         }
 
         // Categoria 3: Acompanhamentos (Grátis)
+        // ✅ ATUALIZADO: Checagem de item.acomp antes de .length
         if (item.acomp && item.acomp.length > 0) {
             text += `\n*Acompanhamentos (Grátis):*\n`; 
             item.acomp.forEach(acomp => {
-                // NOTA: Os seus acompanhamentos estavam usando '*' em vez de '•'. Mantenho o '*' se for sua preferência.
                 text += `* ${acomp.nome}\n`; 
             });
         }
         
-        // Observação (Se existir) - ATUALIZADO PARA USAR 'item.observacoes'
-        if (item.observacoes && item.observacoes.trim() !== '') {
-            const obsLimpa = item.observacoes.trim().replace(/\n/g, ' '); 
+        // Observação (Se existir) - ✅ NOVO: Checa 'observacoes' e 'obs' para compatibilidade
+        const obs = item.observacoes || item.obs;
+        if (obs && obs.trim() !== '') {
+            const obsLimpa = obs.trim().replace(/\n/g, ' '); 
             text += `\nObservação: ${obsLimpa}\n`;
         }
         
-        // Subtotal do Item - REMOVIDO ESPAÇO EXTRA ANTES, DEIXANDO APENAS UM NOVO PARÁGRAFO DE ESPAÇAMENTO
+        // Subtotal do Item
         text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
         
         // Linha de separação entre itens
@@ -154,11 +155,10 @@ const getWhatsappText = (total) => {
     });
 
     // 3. Rodapé
-    // Dupla quebra de linha para separar o rodapé do último item.
     text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
     text += `*Obrigado!*`; 
 
-    // ✅ NOVO TRECHO — Adiciona o valor total no final da mensagem do WhatsApp
+    // Adiciona o valor total no final da mensagem do WhatsApp
     text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
 
     // 4. Retorna a mensagem formatada
@@ -176,7 +176,7 @@ const getWhatsappText = (total) => {
         const totalAPagarDiv = document.getElementById('totalAPagar');
         const nameInput = document.getElementById('nameInputFinal');
         
-        // 3. RECUPERAÇÃO DE DADOS (Remove Bairro)
+        // 3. RECUPERAÇÃO DE DADOS (Nome)
         nameInput.value = localStorage.getItem('tropicanaName') || '';
         
         // 4. CÁLCULO E EXIBIÇÃO
@@ -195,11 +195,14 @@ const getWhatsappText = (total) => {
             let linha = `*1x* Salada #${index + 1} (${item.tamanho.nome}): `;
             let detalhes = [];
 
-            if (item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
-            if (item.extras.length) detalhes.push(`Adic: ${item.extras.map(e => e.nome).join(', ')}`);
-            if (item.acomp.length) detalhes.push(`Acomp: ${item.acomp.map(a => a.nome).join(', ')}`);
-            // ATUALIZADO AQUI TAMBÉM: De item.obs para item.observacoes
-            if (item.observacoes) detalhes.push(`Obs: ${item.observacoes}`);
+            // ✅ ATUALIZADO: Checa a existência dos arrays antes de .length
+            if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
+            if (item.extras && item.extras.length) detalhes.push(`Adic: ${item.extras.map(e => e.nome).join(', ')}`);
+            if (item.acomp && item.acomp.length) detalhes.push(`Acomp: ${item.acomp.map(a => a.nome).join(', ')}`);
+            
+            // ✅ NOVO: Checa 'observacoes' ou 'obs'
+            const obs = item.observacoes || item.obs;
+            if (obs) detalhes.push(`Obs: ${obs}`);
             
             linha += detalhes.join(' | ') + ` - ${formatCurrency(totalItem)}`;
             totalPedido += totalItem;
@@ -231,3 +234,28 @@ const getWhatsappText = (total) => {
             localStorage.setItem('pedidoWhatsApp', whatsappText);
 
             // 5.5 Limpa o localStorage de pedido (VOLTA À ESTACA ZERO)
+            localStorage.removeItem('tropicanaPedidos');
+            localStorage.removeItem('tropicanaName');
+            
+            // 5.6 Redireciona para a tela de sucesso
+            handlePageTransition('sucesso.html'); 
+        });
+
+        // Listener para o botão de Voltar
+        document.getElementById('voltarMenu').addEventListener('click', () => {
+             // Salva o nome antes de voltar
+             localStorage.setItem('tropicanaName', nameInput.value.trim());
+             handlePageTransition('index.html');
+        });
+        
+        // Listener para persistir nome no localStorage
+        nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('loaded');
+        loadAndDisplayOrder();
+    });
+  </script>
+</body>
+</html>
