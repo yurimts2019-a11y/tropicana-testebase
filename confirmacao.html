@@ -171,10 +171,11 @@ const getWhatsappText = (total) => {
             });
         }
         
-        // Observação (Se existir)
-        if (item.obs && item.obs.trim() !== '') {
-            const obsLimpa = item.obs.trim().replace(/\n/g, ' '); 
-            // ✅ CORRIGIDO: Agora o título "Observação" aparece em negrito no WhatsApp
+        // Observação (Se existir) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
+        const obs = item.observacoes || item.obs;
+        if (obs && obs.trim() !== '') {
+            const obsLimpa = obs.trim().replace(/\n/g, ' '); 
+            // Agora o título "Observação" aparece em negrito no WhatsApp
             text += `\n*Observação*: ${obsLimpa}\n`;
         }
         
@@ -225,7 +226,7 @@ const getWhatsappText = (total) => {
             return;
         }
 
-        // ✅ CORRIGIDO: GERAÇÃO DE HTML E ESTRUTURA PARA FORMATAR NO NAVEGADOR
+        // GERAÇÃO DE HTML E ESTRUTURA PARA FORMATAR NO NAVEGADOR
         resumoTexto += pedidos.map((item, index) => {
             const totalItem = item.total; 
             
@@ -244,8 +245,9 @@ const getWhatsappText = (total) => {
             // Acompanhamentos (Checa se o array existe e se tem conteúdo)
             if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
             
-            // Observação (Checa se existe)
-            if (item.obs) detalhes.push(`<span class="detail-label">Obs:</span> ${item.obs}`);
+            // Observação (Checa se existe) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
+            const obs = item.observacoes || item.obs;
+            if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
             
             // Junta os detalhes usando o separador com classe CSS
             linha += detalhes.join(' <span class="separator">|</span> ');
@@ -260,7 +262,7 @@ const getWhatsappText = (total) => {
             return linha;
         }).join(''); // Não usa separador no join, pois o <div> já cria a separação
 
-        resumoPedidoDiv.innerHTML = resumoTexto; // ✅ MUDANÇA CRÍTICA: Usa innerHTML para renderizar o HTML
+        resumoPedidoDiv.innerHTML = resumoTexto; // Usa innerHTML para renderizar o HTML
         totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
 
         // 5. LISTENERS
