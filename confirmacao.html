@@ -28,6 +28,37 @@
     .page-transition.fade-out {
         overflow: hidden; 
     }
+
+    /* NOVO: Estilos para o Resumo do Pedido */
+    .resumo-content {
+        /* Define um espaçamento controlado entre os itens do pedido */
+        display: flex;
+        flex-direction: column;
+        gap: 15px; 
+        padding: 15px 0;
+    }
+    .resumo-item {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        padding-bottom: 10px;
+        border-bottom: 1px dotted #ccc;
+    }
+    .resumo-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .separator {
+        color: #999;
+        margin: 0 5px;
+    }
+    .detail-label {
+        font-weight: 600;
+    }
+    .item-price {
+        /* Usa a cor de alerta para destacar o preço (assumindo que 'style.css' define --color-alert) */
+        color: var(--color-alert, #e53935); 
+        font-size: 1rem;
+    }
   </style>
   
 </head>
@@ -92,7 +123,7 @@
     }
 
 // ======================================================
-// FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (COMPACTADA)
+// FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (SEM ALTERAÇÕES)
 // ======================================================
 const getWhatsappText = (total) => {
     // Recupera os pedidos do localStorage
@@ -114,7 +145,6 @@ const getWhatsappText = (total) => {
         text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
         
         // Categoria 1: Frutas (Grátis)
-        // ✅ ATUALIZADO: Checagem de item.fruits antes de .length
         if (item.fruits && item.fruits.length > 0) {
             text += `\n*Frutas (Grátis):*\n`; 
             item.fruits.forEach(fruta => {
@@ -123,7 +153,6 @@ const getWhatsappText = (total) => {
         }
 
         // Categoria 2: Adicionais de Frutas (Extras Pagos)
-        // ✅ ATUALIZADO: Checagem de item.extras antes de .length
         if (item.extras && item.extras.length > 0) {
             text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
             item.extras.forEach(extra => {
@@ -132,7 +161,6 @@ const getWhatsappText = (total) => {
         }
 
         // Categoria 3: Acompanhamentos (Grátis)
-        // ✅ ATUALIZADO: Checagem de item.acomp antes de .length
         if (item.acomp && item.acomp.length > 0) {
             text += `\n*Acompanhamentos (Grátis):*\n`; 
             item.acomp.forEach(acomp => {
@@ -140,7 +168,7 @@ const getWhatsappText = (total) => {
             });
         }
         
-        // Observação (Se existir) - ✅ NOVO: Checa 'observacoes' e 'obs' para compatibilidade
+        // Observação (Compatibilidade com 'observacoes' e 'obs')
         const obs = item.observacoes || item.obs;
         if (obs && obs.trim() !== '') {
             const obsLimpa = obs.trim().replace(/\n/g, ' '); 
@@ -190,29 +218,46 @@ const getWhatsappText = (total) => {
             return;
         }
 
+        // ✅ ATUALIZADO: GERAÇÃO DE HTML (innerHTML)
         resumoTexto += pedidos.map((item, index) => {
             const totalItem = item.total; 
-            let linha = `*1x* Salada #${index + 1} (${item.tamanho.nome}): `;
+            
+            // Inicia o container do item
+            let linha = `<div class="resumo-item">`;
+            
+            // Título: 1x Salada #N (Tamanho)
+            linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
+            
             let detalhes = [];
 
-            // ✅ ATUALIZADO: Checa a existência dos arrays antes de .length
+            // Frutas
             if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
-            if (item.extras && item.extras.length) detalhes.push(`Adic: ${item.extras.map(e => e.nome).join(', ')}`);
-            if (item.acomp && item.acomp.length) detalhes.push(`Acomp: ${item.acomp.map(a => a.nome).join(', ')}`);
+            // Adicionais
+            if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
+            // Acompanhamentos
+            if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
             
-            // ✅ NOVO: Checa 'observacoes' ou 'obs'
+            // Observação (compatível com 'observacoes' ou 'obs')
             const obs = item.observacoes || item.obs;
-            if (obs) detalhes.push(`Obs: ${obs}`);
+            if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
             
-            linha += detalhes.join(' | ') + ` - ${formatCurrency(totalItem)}`;
+            // Junta os detalhes usando o separador com classe CSS
+            linha += detalhes.join(' <span class="separator">|</span> ');
+            
+            // Preço total do item
+            linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
+            
+            // Fecha o container do item
+            linha += `</div>`; 
+
             totalPedido += totalItem;
             return linha;
-        }).join('\n\n'); 
+        }).join('');  // Não precisa de separador no join, pois cada item já é um bloco <div>
 
-        resumoPedidoDiv.textContent = resumoTexto;
+        resumoPedidoDiv.innerHTML = resumoTexto; // ✅ MUDANÇA CRÍTICA: Usa innerHTML para renderizar o HTML
         totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
 
-        // 5. LISTENERS
+        // 5. LISTENERS (Sem alterações)
         document.getElementById('enviarPedido').addEventListener('click', () => {
              // 5.1 Validar campos
             if (nameInput.value.trim() === '') {
