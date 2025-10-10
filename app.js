@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalOverlay = document.getElementById('customizationModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalTotalSpan = document.getElementById('modalTotal');
-    // const modalResumoDiv = document.getElementById('modalResumo'); // 🚨 REMOVIDO
-    // const obsInput = document.getElementById('obsInput'); // REMOVIDO: CAMPO OBSERVAÇÕES
     const addToOrderBtn = document.getElementById('addToOrder');
     const storeStatusSpan = document.querySelector('.store-status');
+    // NOVO: Referência ao campo de Observações
+    const obsInput = document.getElementById('obsInput'); 
 
     // Opções de frutas, extras e acomp no modal
     const frutasOpcoesDiv = document.getElementById('frutasOpcoes');
@@ -251,7 +251,8 @@ function checkStoreStatus() {
             itemAtual = JSON.parse(JSON.stringify(pedidos[index])); // Clonar o objeto para edição
             modalTitle.textContent = `Editar Salada #${index + 1} (${itemAtual.tamanho.nome})`;
             addToOrderBtn.textContent = 'Salvar Alterações';
-            // obsInput.value = itemAtual.obs || ''; // REMOVIDO: CAMPO OBSERVAÇÕES
+            // NOVO: Preenche o campo de observações ao editar
+            obsInput.value = itemAtual.observacoes || ''; 
         } else {
             itemEmEdicaoIndex = -1;
             itemAtual = { 
@@ -259,12 +260,13 @@ function checkStoreStatus() {
                 fruits: [], 
                 extras: [], 
                 acomp: [], 
-                // obs: '', // REMOVIDO: CAMPO OBSERVAÇÕES
+                observacoes: '', // NOVO: Inicializa o campo de observações
                 total: 0
             };
             modalTitle.textContent = `Personalizar Salada ${tamanho.nome}`;
             addToOrderBtn.textContent = 'Adicionar ao Pedido - ' + formatCurrency(tamanho.preco);
-            // obsInput.value = ''; // REMOVIDO: CAMPO OBSERVAÇÕES
+            // NOVO: Limpa o campo para novo item
+            obsInput.value = ''; 
         }
 
         renderizarOpcoes(frutasOpcoesDiv, fruits, 'FRUITS', FRUIT_LIMIT);
@@ -359,7 +361,11 @@ function checkStoreStatus() {
 
         // Se a quantidade é sempre 1, a lógica de itemAtual.quantity não afeta o pedido
         itemAtual.quantity = 1; 
-        // itemAtual.obs já está removido da inicialização, mas se vier de um pedido antigo:
+
+        // NOVO: Captura o valor de observações do input antes de salvar no itemAtual
+        itemAtual.observacoes = obsInput.value.trim(); 
+        
+        // Remove a antiga propriedade 'obs' caso exista em pedidos carregados de versões antigas
         delete itemAtual.obs; 
 
         if (itemEmEdicaoIndex !== -1) {
@@ -401,6 +407,7 @@ function checkStoreStatus() {
                         ${item.fruits.length ? `<p>Frutas (${item.fruits.length}): ${item.fruits.map(f => f.nome).join(', ')}</p>` : ''}
                         ${item.extras.length ? `<p>Adicionais: ${item.extras.map(e => e.nome).join(', ')}</p>` : ''}
                         ${item.acomp.length ? `<p>Acomp: ${item.acomp.map(a => a.nome).join(', ')}</p>` : ''}
+                        ${item.observacoes ? `<p class="order-obs">📝 Obs: ${item.observacoes}</p>` : ''}
                         </div>
                     <div class="order-actions">
                         <button class="btn editar-item" onclick="editItem(${index})">Editar</button>
@@ -431,7 +438,8 @@ function checkStoreStatus() {
                 if (item.fruits.length) detalhes.push(item.fruits.map(f => f.nome).join(', '));
                 if (item.extras.length) detalhes.push(`+${item.extras.map(e => e.nome).join(', ')}`);
                 if (item.acomp.length) detalhes.push(`Acomp: ${item.acomp.map(a => a.nome).join(', ')}`);
-                // if (item.obs) detalhes.push(`Obs: ${item.obs}`); // REMOVIDO: CAMPO OBSERVAÇÕES
+                // NOVO: Adiciona Observações ao resumo da caixa
+                if (item.observacoes) detalhes.push(`Obs: ${item.observacoes}`); 
                 
                 linha += detalhes.join(' | ') + ` - ${formatCurrency(totalItem)}`;
                 totalPedido += totalItem;
@@ -492,7 +500,8 @@ function checkStoreStatus() {
     }
         
     function editItem(index) {
-        openModal(pedidos[index].tamanho, index);
+        // Usa o objeto de tamanho do item para abrir o modal no modo edição
+        openModal(pedidos[index].tamanho, index); 
     }
 
     // 9. FUNÇÃO DE ENVIO DO PEDIDO (WHATSAPP)
@@ -524,7 +533,6 @@ function checkStoreStatus() {
     });
 
     addToOrderBtn.addEventListener('click', addToOrder);
-    // obsInput.addEventListener('input', atualizarModalResumo); // REMOVIDO: CAMPO OBSERVAÇÕES
     
     // Inicialização
     renderizarSelecaoTamanho();
