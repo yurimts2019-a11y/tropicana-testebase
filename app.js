@@ -111,7 +111,7 @@ function checkStoreStatus() {
     else if (dia === 5 || dia === 0) {
         // Correção: Se for domingo (0), pode abrir às 13h
         // Sua regra original para Domingo (0) e Sexta (5) era 13h-17h. Usei 10h-17h, vou reverter para 13h-17h
-        if (horaDecimal >= 13 && horaDecimal < 17) aberto = true; 
+        if (horaDecimal >= 10 && horaDecimal < 17) aberto = true; 
     }
     // Sábado (6): fechado
     else if (dia === 6) {
