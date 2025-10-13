@@ -1009,3 +1009,30 @@ body.store-closed #closed-overlay {
     padding: 10px 20px;
   }
 }
+
+/* === Texto com efeito de rolagem no splash === */
+.scrolling-text {
+  position: absolute;
+  bottom: 80px; /* Ajuste conforme o tamanho da logo */
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.scrolling-text span {
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #3c3c3c;
+  animation: scroll-text 8s linear infinite;
+}
+
+@keyframes scroll-text {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
