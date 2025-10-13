@@ -104,7 +104,7 @@ function checkStoreStatus() {
   let aberto = false;
 
   if (dia >= 1 && dia <= 4) {
-    if (horaDecimal >= 14 && horaDecimal < 22) aberto = true;
+    if (horaDecimal >= 13 && horaDecimal < 22) aberto = true;
   } else if (dia === 5 || dia === 0) {
     if (horaDecimal >= 13 && horaDecimal < 17) aberto = true;
   }
