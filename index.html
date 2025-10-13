@@ -8,7 +8,7 @@
   
   <link rel="manifest" href="/manifest.json">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14"> 
+  <link rel="stylesheet" href="style.css?v=15"> 
   
   <style>
     /* ===============================
@@ -25,19 +25,20 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      animation: fadeOutSplash 1s ease 2.5s forwards;
+      animation: fadeOutSplash 1s ease 2.8s forwards;
     }
 
     #splash-screen img {
-      width: 150px;
-      animation: popIn 1.2s ease;
+      width: 170px;
+      animation: logoBounce 2.5s ease-in-out infinite;
       filter: drop-shadow(0 0 10px rgba(0,0,0,0.2));
     }
 
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      60% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(1); }
+    @keyframes logoBounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      30% { transform: scale(1.15) translateY(-10px); }
+      50% { transform: scale(0.95) translateY(5px); }
+      70% { transform: scale(1.05) translateY(-5px); }
     }
 
     @keyframes fadeOutSplash {
@@ -70,7 +71,7 @@
 
   <!-- Tela de abertura estilo iFood -->
   <div id="splash-screen">
-    <img src="icon-192.png" alt="Delícias Tropicana">
+    <img src="logo.png" alt="Delícias Tropicana"> <!-- use seu arquivo PNG aqui -->
   </div>
   
   <header class="main-header">
@@ -160,16 +161,16 @@
   </footer>
 
   <script>
-    // Mostra conteúdo apenas após a animação do logo
+    // Remove o splash após animação
     document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         document.body.classList.add("loaded");
         const splash = document.getElementById("splash-screen");
         if (splash) splash.style.display = "none";
-      }, 2800);
+      }, 2900);
     });
   </script>
 
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=15"></script>
 </body>
 </html>
