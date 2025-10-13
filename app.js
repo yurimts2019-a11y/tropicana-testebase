@@ -1,19 +1,45 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Mostra splash inicial
   const splash = document.getElementById('splash-screen');
+
+  // Mostra splash ao carregar o site
   if (splash) {
     splash.classList.add('active');
-    setTimeout(() => splash.classList.remove('active'), 1800);
+    setTimeout(() => splash.classList.remove('active'), 800);
   }
 
-  // Função de transição entre páginas com splash
+  // Função para exibir splash curto
+  function showSplash(duration = 500) {
+    if (!splash) return;
+    splash.classList.add('active');
+    setTimeout(() => splash.classList.remove('active'), duration);
+  }
+
+  // Substitui a função de transição de página
   window.handlePageTransition = function(url) {
-    const splash = document.getElementById('splash-screen');
-    if (splash) splash.classList.add('active');
+    showSplash(500);
     setTimeout(() => {
       window.location.href = url;
-    }, 800);
+    }, 500);
   };
 
-  // ... restante do app.js original (seu código de inicialização e lógica)
+  // Observa o modal (abrir/fechar)
+  const modal = document.getElementById('customizationModal');
+  const openModalOriginal = window.openModal;
+  const closeModalOriginal = window.closeModal;
+
+  // Envolve a função openModal original, se existir
+  window.openModal = function(...args) {
+    showSplash(400);
+    setTimeout(() => {
+      if (typeof openModalOriginal === 'function') openModalOriginal(...args);
+    }, 400);
+  };
+
+  // Envolve a função closeModal original, se existir
+  window.closeModal = function(...args) {
+    showSplash(400);
+    setTimeout(() => {
+      if (typeof closeModalOriginal === 'function') closeModalOriginal(...args);
+    }, 400);
+  };
 });
