@@ -1011,48 +1011,60 @@ body.store-closed #closed-overlay {
 }
 
 /* ===============================
-   NOVO CSS: Efeito de Rolagem Infinito (2 Linhas + Mais Rápido)
+   CORREÇÃO CSS: Efeito de Rolagem Infinito (2 Linhas + Mais Rápido)
+   - Removido o 'position: absolute' para evitar sobreposição.
+   - Ajustada a centralização.
 =============================== */
 #splash-screen {
-    flex-direction: column; 
-    position: relative; 
+    /* MANTER: O display: flex já está aqui. */
+    flex-direction: column; /* Essencial para empilhar logo e texto */
+    /* REMOVER: position: relative; se já tiver no css principal. */
+    /* Vamos garantir que a logo e o texto fiquem centralizados verticalmente: */
+    justify-content: center;
+    align-items: center;
+    /* Outras propriedades de animação (fadeOutSplash, etc) não devem mudar */
 }
 
+/* Não mexemos na #splash-screen img, pois ela já está correta */
+
+
 .scrolling-phrase-container {
-    width: 350px; /* Aumentado para acomodar 2 linhas */
+    width: 350px; /* Largura do container para cortar a frase */
     height: 44px; /* Altura para mostrar as 2 linhas */
     overflow: hidden; 
-    position: absolute; 
-    top: 60%; 
+    
+    /* REMOVER OS ESTILOS QUE CAUSAM SOBREPOSIÇÃO: */
+    /* REMOVIDO: position: absolute; */
+    /* REMOVIDO: top: 60%; */
+    /* REMOVIDO: left: 50%; */
+    /* REMOVIDO: transform: translateX(-50%); */
+    
     z-index: 999;
-    /* Centraliza o container horizontalmente: */
-    left: 50%;
-    transform: translateX(-50%);
-    /* Removendo white-space: nowrap do container */
+    margin-top: 20px; /* Espaço entre a logo e a frase */
 }
 
 .scrolling-phrase {
-    display: flex; /* As linhas vão ficar empilhadas verticalmente dentro */
-    flex-direction: column;
+    /* Não precisamos de display: flex aqui. */
+    /* display: flex; REMOVIDO */
+    /* flex-direction: column; REMOVIDO */
     height: 100%;
-    /* A animação agora está no .phrase-line */
 }
 
 .phrase-line {
     display: flex;
-    white-space: nowrap; /* Mantém o texto da linha na horizontal */
-    animation: scrollText 8s linear infinite; /* VELOCIDADE AUMENTADA (8s) */
+    white-space: nowrap; 
+    animation: scrollText 8s linear infinite; /* VELOCIDADE MAIS RÁPIDA (8s) */
     align-items: center;
-    line-height: 1.1; /* Espaçamento entre linhas */
+    line-height: 1.1; 
 }
 
 .phrase-text {
-    font-size: 0.9em; /* Tamanho levemente reduzido para caber 2 linhas */
+    font-size: 0.9em; 
     font-weight: 700;
-    color: #ffffff; /* Cor branca */
-    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+    color: #ffffff; 
+    text-shadow: 0 0 5px rgba(0,0,0,0.5); 
     text-transform: uppercase;
-    margin: 0 20px; /* Espaçamento entre as frases duplicadas */
+    margin: 0 20px; 
     display: inline-block;
 }
 
