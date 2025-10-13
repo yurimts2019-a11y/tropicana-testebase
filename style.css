@@ -1011,40 +1011,48 @@ body.store-closed #closed-overlay {
 }
 
 /* ===============================
-   NOVO CSS: Efeito de Rolagem Infinito
+   NOVO CSS: Efeito de Rolagem Infinito (2 Linhas + Mais Rápido)
 =============================== */
 #splash-screen {
-    /* MUDANÇA: Necessário para empilhar a logo e a frase */
     flex-direction: column; 
     position: relative; 
 }
 
 .scrolling-phrase-container {
-    width: 300px; /* Largura do container para cortar a frase */
-    overflow: hidden; /* Esconde o texto que ultrapassa */
+    width: 350px; /* Aumentado para acomodar 2 linhas */
+    height: 44px; /* Altura para mostrar as 2 linhas */
+    overflow: hidden; 
     position: absolute; 
-    top: 60%; /* Ajuste a porcentagem para posicionar abaixo da logo */
-    white-space: nowrap; /* Mantém o texto na mesma linha */
-    /* REMOVIDO: box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
-    /* REMOVIDO: background: #000000; */
-    padding: 5px 0;
-    border-radius: 4px;
+    top: 60%; 
     z-index: 999;
+    /* Centraliza o container horizontalmente: */
+    left: 50%;
+    transform: translateX(-50%);
+    /* Removendo white-space: nowrap do container */
 }
 
 .scrolling-phrase {
+    display: flex; /* As linhas vão ficar empilhadas verticalmente dentro */
+    flex-direction: column;
+    height: 100%;
+    /* A animação agora está no .phrase-line */
+}
+
+.phrase-line {
     display: flex;
-    animation: scrollText 15s linear infinite; /* Aplica a animação */
+    white-space: nowrap; /* Mantém o texto da linha na horizontal */
+    animation: scrollText 8s linear infinite; /* VELOCIDADE AUMENTADA (8s) */
     align-items: center;
+    line-height: 1.1; /* Espaçamento entre linhas */
 }
 
 .phrase-text {
-    font-size: 1.1em;
+    font-size: 0.9em; /* Tamanho levemente reduzido para caber 2 linhas */
     font-weight: 700;
-    color: #ffffff; /* NOVO: Cor branca para o texto */
-    text-shadow: 0 0 5px rgba(0,0,0,0.5); /* OPCIONAL: Uma leve sombra para destacar no fundo amarelo */
+    color: #ffffff; /* Cor branca */
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
     text-transform: uppercase;
-    margin: 0 30px; /* Espaçamento entre as frases duplicadas */
+    margin: 0 20px; /* Espaçamento entre as frases duplicadas */
     display: inline-block;
 }
 
