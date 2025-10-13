@@ -89,66 +89,62 @@
     </div>
   </header>
   
-  <div class="container">
-      
-      <div class="menu">
-          
-          <div class="modern-title-container">
-              <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
-              <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
-          </div>
-          <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;">
-          </div>
-          
-          <div class="section-card" id="seuPedidoCard"> 
-              <h3 class="section-title">Seu Pedido</h3>
-              
-              <div class="cards-container" id="cardsContainer">
-                  <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
-              </div>
-              
-              <div class="resumo-box" id="resumoBox">
-                  <p><strong>Resumo Detalhado:</strong></p>
-                  <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
-              </div>
+  <main class="container fade-page">
+    <div class="menu">
+      <div class="modern-title-container">
+        <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
+        <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
+      </div>
 
+      <div id="sizeSelectionContainer" class="size-selection-container">
+        </div>
+      
+      <div class="resumo-pedido-section">
+        <h3 class="section-title">Resumo do Meu Pedido:</h3>
+        <div id="resumoContent" class="resumo-container">
           </div>
       </div>
-      
-    <div id="customizationModal" class="modal-overlay">
-      <div class="modal-content">
-          <button class="close-modal" id="closeModal">X</button>
-          
-          <h3 id="modalTitle">Personalizar Salada</h3>
-          
-          <div class="custom-options">
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Escolha as Frutas (Máx. 05):</h4> 
-                  <div class="opcoes opcoes-frutas" id="frutasOpcoes"></div>
-              </div>
-
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Adicionais de Frutas (Máx. 01 - R$2,00 cada):</h4>
-                  <div class="opcoes opcoes-extras" id="extrasOpcoes"></div>
-              </div>
-
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Acompanhamentos (Grátis):</h4>
-                  <div class="opcoes opcoes-acomp" id="acompOpcoes"></div>
-              </div>
-            
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">📝 Observações:</h4>
-                  <textarea id="obsInput" class="text-input" rows="3" placeholder="Ex: granola separada, pouco mel..."></textarea>
-              </div>
-          </div>
-
-          <button id="addToOrder" class="btn adicionar">Adicionar ao Pedido - <span id="modalTotal">R$0,00</span></button>
-      </div>
+    </div>
+  </main>
+  
+  <div class="footer-bar">
+    <div class="footer-content">
+      <div class="resumo-total" id="totalResumo"></div>
+      <button id="adicionarPedidoBtn" class="btn btn-finalizar">Adicionar Pedido</button> 
     </div>
   </div>
 
-<!-- Rodapé institucional -->
+  <div class="modal-overlay" id="customizationModal">
+    <div class="modal-content">
+        <button class="close-modal" id="closeModal">X</button>
+        <h2 id="modalTitle">Personalizar Salada</h2>
+        
+        <div class="custom-options">
+            <div class="grupo-opcoes">
+                <h4 class="categoria-title">🍎 Frutas (Grátis - Escolha até 5):</h4>
+                <div class="opcoes opcoes-frutas" id="frutasOpcoes"></div>
+            </div>
+            
+            <div class="grupo-opcoes">
+                <h4 class="categoria-title">➕ Adicionais de Fruta (R$2,00 cada):</h4>
+                <div class="opcoes opcoes-extras" id="extrasOpcoes"></div>
+            </div>
+
+            <div class="grupo-opcoes">
+                <h4 class="categoria-title">➡️ Acompanhamentos (Grátis):</h4>
+                <div class="opcoes opcoes-acomp" id="acompOpcoes"></div>
+            </div>
+          
+            <div class="grupo-opcoes">
+                <h4 class="categoria-title">📝 Observações:</h4>
+                <textarea id="obsInput" class="text-input" rows="3" placeholder="Ex: granola separada, pouco mel..."></textarea>
+            </div>
+        </div>
+
+        <button id="addToOrder" class="btn adicionar">Adicionar ao Pedido - <span id="modalTotal">R$0,00</span></button>
+    </div>
+  </div>
+
 <footer class="site-footer">
   <p>🍍 <strong>Delícias Tropicana</strong></p>
   <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta 13:00h–17:00h</p>
@@ -158,12 +154,9 @@
 
 <div id="closed-overlay">
   <h2>⏰ Loja Fechada</h2>
-  <p>Horário de Funcionamento:</p>
-  <p>Segunda a Quinta: das 13h00 às 22h00</p>
-  <p>Sexta-feira: das 13h00 às 17h00</p>
-  <button class="btn" onclick="window.open('https://wa.me/5565993321761','_blank')">Fale conosco</button>
+  <p>Nosso horário de funcionamento é: Segunda a Quinta das 13h às 22h e Sexta e Domingo das 13h às 17h. Agradecemos a compreensão!</p>
 </div>
 
-  <script src="app.js?v=14"></script>
+<script src="app.js?v=15"></script>
 </body>
 </html>
