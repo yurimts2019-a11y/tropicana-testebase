@@ -597,3 +597,40 @@ function checkStoreStatus() {
     setInterval(checkStoreStatus, 60000);
     loadFromLocalStorage(); // <--- CARREGA O PEDIDO SALVO AO INICIAR
 });
+
+
+// === EXPANSÃO DO SPLASH: aplica a todas as interações ===
+document.addEventListener('DOMContentLoaded', function() {
+  const splash = document.getElementById('splash-screen');
+  if (!splash) return;
+
+  function showSplash(duration = 500) {
+    splash.classList.add('active');
+    setTimeout(() => splash.classList.remove('active'), duration);
+  }
+
+  // Adiciona splash em todos os botões
+  document.body.addEventListener('click', function(e) {
+    const target = e.target.closest('button, .btn');
+    if (target) {
+      showSplash(300);
+    }
+  });
+
+  // Adiciona splash em todas as opções de frutas/extras/acompanhamentos
+  document.body.addEventListener('click', function(e) {
+    const optionItem = e.target.closest('.option-item, .option-label, input[type="checkbox"]');
+    if (optionItem) {
+      showSplash(300);
+    }
+  });
+
+  // Mostra splash antes de enviar para o WhatsApp
+  const oldEnviarPedido = window.enviarPedido;
+  if (typeof oldEnviarPedido === 'function') {
+    window.enviarPedido = function(...args) {
+      showSplash(500);
+      setTimeout(() => oldEnviarPedido(...args), 500);
+    };
+  }
+});
