@@ -1025,8 +1025,8 @@ body.store-closed #closed-overlay {
     position: absolute; 
     top: 60%; /* Ajuste a porcentagem para posicionar abaixo da logo */
     white-space: nowrap; /* Mantém o texto na mesma linha */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    background: #000000;
+    /* REMOVIDO: box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */
+    /* REMOVIDO: background: #000000; */
     padding: 5px 0;
     border-radius: 4px;
     z-index: 999;
@@ -1041,7 +1041,8 @@ body.store-closed #closed-overlay {
 .phrase-text {
     font-size: 1.1em;
     font-weight: 700;
-    color: #FFD21E; /* Cor amarela da sua logo para contraste */
+    color: #ffffff; /* NOVO: Cor branca para o texto */
+    text-shadow: 0 0 5px rgba(0,0,0,0.5); /* OPCIONAL: Uma leve sombra para destacar no fundo amarelo */
     text-transform: uppercase;
     margin: 0 30px; /* Espaçamento entre as frases duplicadas */
     display: inline-block;
@@ -1049,6 +1050,5 @@ body.store-closed #closed-overlay {
 
 @keyframes scrollText {
     0% { transform: translateX(0); }
-    /* Move o elemento pela metade, fazendo a segunda frase aparecer */
     100% { transform: translateX(-50%); } 
 }
