@@ -924,3 +924,56 @@ textarea.obs {
     font-weight: 500;
     white-space: pre-wrap; /* Preserva formatação e quebras de linha */
 }
+
+/* ======================================= */
+/* MODO CINZA E OVERLAY QUANDO FECHADO     */
+/* ======================================= */
+body.store-closed {
+  filter: grayscale(100%) brightness(0.9);
+  pointer-events: none;
+  user-select: none;
+}
+
+#closed-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  backdrop-filter: blur(4px);
+}
+
+body.store-closed #closed-overlay {
+  display: flex;
+  pointer-events: all;
+}
+
+#closed-overlay h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+#closed-overlay p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+#closed-overlay .btn {
+  background: #ff9800;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#closed-overlay .btn:hover {
+  background: #e68900;
+}
