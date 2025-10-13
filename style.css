@@ -300,7 +300,7 @@ body.modal-open {
 }
 
 .modal-content {
-    background: var(--accent); /* ✅ NOVO: Fundo Laranja Claro */
+    background: var(--card);
     width: 100%;
     max-width: var(--max-width);
     padding: 20px;

@@ -90,27 +90,30 @@
   </header>
   
   <div class="container">
-    <div class="menu">
-      <div class="modern-title-container">
-          <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
-          <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
-      </div>
-
-      <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;"></div>
       
-      <div class="section-card" id="seuPedidoCard"> 
-          <h3 class="section-title">Seu Pedido</h3>
+      <div class="menu">
           
-          <div class="cards-container" id="cardsContainer">
-              <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
+          <div class="modern-title-container">
+              <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
+              <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
+          </div>
+          <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;">
           </div>
           
-          <div class="resumo-box" id="resumoBox">
-              <p><strong>Resumo Detalhado:</strong></p>
-              <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
+          <div class="section-card" id="seuPedidoCard"> 
+              <h3 class="section-title">Seu Pedido</h3>
+              
+              <div class="cards-container" id="cardsContainer">
+                  <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
+              </div>
+              
+              <div class="resumo-box" id="resumoBox">
+                  <p><strong>Resumo Detalhado:</strong></p>
+                  <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
+              </div>
+
           </div>
       </div>
-    </div>
       
     <div id="customizationModal" class="modal-overlay">
       <div class="modal-content">
@@ -133,7 +136,7 @@
                   <h4 class="categoria-title">➡️ Acompanhamentos (Grátis):</h4>
                   <div class="opcoes opcoes-acomp" id="acompOpcoes"></div>
               </div>
-              
+            
               <div class="grupo-opcoes">
                   <h4 class="categoria-title">📝 Observações:</h4>
                   <textarea id="obsInput" class="text-input" rows="3" placeholder="Ex: granola separada, pouco mel..."></textarea>
@@ -145,28 +148,14 @@
     </div>
   </div>
 
-  <footer class="site-footer">
-    <p>🍍 <strong>Delícias Tropicana</strong></p>
-    <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta e Domingo 13:00h–17:00h</p>
-    <p>
-      <a href="https://wa.me/5565993321761" target="_blank">
-        📞 Fale Conosco pelo <strong>WhatsApp</strong>!
-      </a>
-    </p>
-    <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
-  </footer>
+<!-- Rodapé institucional -->
+<footer class="site-footer">
+  <p>🍍 <strong>Delícias Tropicana</strong></p>
+  <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta e Domingo 13:00h–17:00h</p>
+  <p>📞 WhatsApp: <a href="https://wa.me/5565993321761" target="_blank">Clique e mande uma mensagem!</a></p>
+  <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
+</footer>
 
-  <script>
-    // Remove o splash após animação
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        document.body.classList.add("loaded");
-        const splash = document.getElementById("splash-screen");
-        if (splash) splash.style.display = "none";
-      }, 2900);
-    });
-  </script>
-
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>

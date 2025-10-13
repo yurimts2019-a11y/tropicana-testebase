@@ -124,71 +124,75 @@
     }
 
 // ======================================================
-// FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (AGORA COM EMOJIS)
+// FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (CORRIGIDA)
 // ======================================================
 const getWhatsappText = (total) => {
     // Recupera os pedidos do localStorage
     const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
-    // Pega o nome diretamente do campo de input (mais seguro)
-    const name = document.getElementById('nameInputFinal').value.trim() || 'Cliente'; 
-    const FRUIT_LIMIT = 5; // Limite de frutas para o texto
+    const name = localStorage.getItem('tropicanaName') || 'Cliente';
 
-    // 1. Início da Mensagem (NOVO FORMATO COM EMOJIS)
-    let text = `🚨 *NOVO PEDIDO - DELÍCIAS TROPICANA* 🍍\n\n`;
-    text += `Olá, meu nome é *${name}* 👋 e aqui está o meu pedido:\n`;
-    text += "---------------------------------\n";
-
+    // 1. Início da Mensagem (NOVO FORMATO LIMPO COM NEGRITO NO TÍTULO E NOME)
+    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`; // Dupla quebra para separar o título da mensagem
+    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`; // Dupla quebra para separar a introdução do primeiro item
+    
     // 2. Loop pelos itens do pedido
     pedidos.forEach((item, index) => {
-        const itemNumber = index + 1;
-        
-        text += `\n👉 *ITEM ${itemNumber}:* Salada ${item.tamanho.nome}\n`;
-        text += `*Tamanho:* ${item.tamanho.nome} | *Valor Base:* ${formatCurrency(item.tamanho.preco)}\n`;
+        const precoUnitario = item.tamanho.preco;
 
-        // Frutas
-        if (item.fruits && item.fruits.length) {
-            text += `\n🍓 *Frutas (Máx. ${FRUIT_LIMIT} Grátis):*\n`;
-            item.fruits.map(f => f.nome).forEach(fruit => {
-                text += `• ${fruit}\n`;
+        // Título do Item - AGORA COM APENAS UMA QUEBRA DE LINHA NO FINAL
+        text += `ITEM ${index + 1}\n`; 
+        
+        // Tamanho e Preço
+        text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
+        
+        // Categoria 1: Frutas (Grátis)
+        if (item.fruits && item.fruits.length > 0) {
+            // Usa dupla quebra para separar o item.tamanho da categoria
+            text += `\n*Frutas (Grátis):*\n`; 
+            item.fruits.forEach(fruta => {
+                text += `• ${fruta.nome}\n`;
             });
         }
 
-        // Extras
-        if (item.extras && item.extras.length) {
-            text += `\n➕ *Adicionais de Fruta (R$2,00 cada):*\n`;
-            item.extras.map(e => e.nome).forEach(extra => {
-                text += `• ${extra}\n`;
+        // Categoria 2: Adicionais de Frutas (Extras Pagos)
+        if (item.extras && item.extras.length > 0) {
+            text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
+            item.extras.forEach(extra => {
+                text += `• ${extra.nome}\n`;
+            });
+        }
+
+        // Categoria 3: Acompanhamentos (Grátis)
+        if (item.acomp && item.acomp.length > 0) {
+            text += `\n*Acompanhamentos (Grátis):*\n`; 
+            item.acomp.forEach(acomp => {
+                // NOTA: Os seus acompanhamentos estavam usando '*' em vez de '•'. Mantenho o '*' se for sua preferência.
+                text += `* ${acomp.nome}\n`; 
             });
         }
         
-        // Acompanhamentos
-        if (item.acomp && item.acomp.length) {
-            text += `\n🥄 *Acompanhamentos (Grátis):*\n`;
-            item.acomp.map(a => a.nome).forEach(acompItem => {
-                text += `• ${acompItem}\n`; 
-            });
-        }
-        
-        // Observação (Checa por 'observacoes' e 'obs')
+        // Observação (Se existir) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
         const obs = item.observacoes || item.obs;
         if (obs && obs.trim() !== '') {
             const obsLimpa = obs.trim().replace(/\n/g, ' '); 
-            text += `\n📝 *Observações do Item:* ${obsLimpa}\n`;
+            // Agora o título "Observação" aparece em negrito no WhatsApp
+            text += `\n*Observações*: ${obsLimpa}\n`;
         }
         
-        // Subtotal do Item
-        text += `\n💵 *Subtotal do Item:* ${formatCurrency(item.total)}\n`;
+        // Subtotal do Item - REMOVIDO ESPAÇO EXTRA ANTES, DEIXANDO APENAS UM NOVO PARÁGRAFO DE ESPAÇAMENTO
+        text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
         
         // Linha de separação entre itens
-        text += `---------------------------------`; 
+        text += `---------------------------------\n`; 
     });
 
     // 3. Rodapé
-    text += `\n\n✅ Aguardo a confirmação do pedido e o cálculo da taxa de entrega.`;
-    text += `\n\n*Obrigado!* 🙏`; 
+    // Dupla quebra de linha para separar o rodapé do último item.
+    text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
+    text += `*Obrigado!*`; 
 
     // Adiciona o valor total no final da mensagem do WhatsApp
-    text += `\n\n*VALOR TOTAL DO PEDIDO:* 💰 *${formatCurrency(total)}*`;
+    text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
 
     // 4. Retorna a mensagem formatada
     return text;
@@ -275,8 +279,8 @@ const getWhatsappText = (total) => {
             // 5.3 Gera o texto para o WhatsApp com a nova formatação
             let whatsappText = getWhatsappText(totalPedido);
 
-            // ❌ LINHA REMOVIDA: A LINHA ABAIXO É A QUE CAUSA CARACTERES ESTRANHOS.
-            // whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
+            // ✅ REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
+            whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
 
 
             // 5.4 Salva a mensagem no storage e redireciona para a tela de sucesso
