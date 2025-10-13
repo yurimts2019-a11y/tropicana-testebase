@@ -452,10 +452,12 @@ body.modal-open {
     top: 0;
     background-color: #fff;
 }
+
 .option-item input[type="checkbox"]:checked {
     border-color: var(--color-alert); /* VERMELHO */
     background-color: var(--color-alert); /* VERMELHO */
 }
+
 .option-item input[type="checkbox"]:checked::after {
     content: '✓';
     color: white;
@@ -465,6 +467,7 @@ body.modal-open {
     text-align: center;
     font-weight: 900;
 }
+
 
 /* CORES POR CATEGORIA (Borda Lateral e Checkbox) */
 .opcoes-frutas .option-item.selected {
@@ -490,8 +493,8 @@ body.modal-open {
     border-color: var(--chip-acomp);
     background-color: var(--chip-acomp);
 }
-
 /* -------------------------------------- */
+
 
 .preview-box {
     background: #fff3e0;
@@ -500,11 +503,13 @@ body.modal-open {
     padding: 15px;
     margin-top: 20px;
 }
+
 .preview-box p {
     margin-top: 0;
     font-weight: 600;
     color: #555;
 }
+
 .preview-box .resumo-content {
     white-space: pre-wrap;
     font-family: inherit;
@@ -519,243 +524,407 @@ body.modal-open {
     padding: 12px 20px;
     font-size: 1.1em;
     margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4);
+    box-shadow: 0 4px 10px rgba(229, 57, 53, 0.4); /* Sombra vermelha */
 }
+
 .btn.adicionar:hover {
-    background: linear-gradient(45deg, #c62828, #b71c1c); 
+    background: linear-gradient(45deg, #c62828, #b71c1c); /* VERMELHO MAIS ESCURO */
 }
 
-/* ======================================= */
-/* RESUMO DE ITENS (INDEX.HTML) */
-/* ======================================= */
-
-.resumo-pedido-section {
-    padding-bottom: 20px;
-}
-.resumo-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.empty-cart {
-    text-align: center;
-    color: var(--muted);
-    font-style: italic;
-    padding: 15px 0;
-    border-top: 1px dashed #eee;
-    margin: 10px 0 0;
-}
-
-.resumo-item-card {
-    padding: 15px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-}
-.item-title {
-    font-size: 1.1em;
-    color: var(--orange);
-    margin: 0;
-    font-weight: 700;
-}
-.item-details {
-    font-size: 0.9em;
-    color: #555;
-    margin: 5px 0;
-    line-height: 1.4;
-}
-
-.item-price-final {
-    text-align: right;
-    font-weight: 700;
-    color: var(--color-alert);
-    font-size: 1.1em;
-    margin-top: 10px;
-    padding-top: 5px;
-    border-top: 1px dashed #eee;
-}
-
-.item-actions {
-    display: flex;
-    gap: 8px;
-}
-.action-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    font-size: 1em;
-}
-.action-btn .icon {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    transition: transform 0.1s;
-}
-.action-btn:hover .icon {
-    transform: scale(1.15);
-}
-
-/* ======================================= */
-/* FOOTER BAR (Barra Fixa Inferior) */
-/* ======================================= */
-.footer-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: var(--card);
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.1);
-    z-index: 50;
-    padding: 10px 16px; 
-    
-    /* Animação para aparecer */
-    opacity: 0;
-    transform: translateY(100%);
-    animation: slideUp 0.3s ease-out 0.5s forwards;
-}
-
-@keyframes slideUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.footer-content {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-}
-
-.resumo-total {
-    font-size: 1.2em;
-    font-weight: 700;
-    color: var(--color-alert);
-    flex-shrink: 0;
-    padding-right: 5px;
-    text-align: right;
-}
-
-.btn.btn-finalizar {
-    background: linear-gradient(45deg, var(--color-lime-light), var(--color-lime-dark)); /* VERDE LIMÃO */
-    color: #333;
-    font-size: 1.1em;
-    font-weight: 700;
-    padding: 12px 20px;
-    flex-grow: 1;
-    box-shadow: 0 4px 10px rgba(175, 180, 43, 0.4);
-}
-.btn.btn-finalizar:hover {
-    background: var(--color-lime-dark);
-    color: #222;
-}
-
-/* ======================================= */
-/* BOTÕES DA CONFIRMAÇÃO */
-/* ======================================= */
-.confirmation-actions {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.resumo-total-final {
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 10px;
-    padding: 10px 0;
-}
-
-.btn.btn-whatsapp {
-    background: #25d366; /* Cor do WhatsApp */
-    color: white;
-    padding: 15px;
-    font-size: 1.2em;
-    box-shadow: 0 4px 10px rgba(37, 211, 102, 0.5);
-}
-.btn.btn-whatsapp:hover {
-    background: #1eaa54; 
-}
-
-.btn.btn-voltar {
-    background: #f0f0f0;
-    color: #555;
-    border: 1px solid #ddd;
-    padding: 12px;
-}
-.btn.btn-voltar:hover {
-    background: #e0e0e0;
-}
-
-
-/* ======================================= */
-/* INPUTS (Final Page) */
-/* ======================================= */
+/* Inputs de Observações e Nome/Bairro */
 .campo {
+    display: block;
     margin-bottom: 15px;
 }
-.campo .label {
+
+.label {
     display: block;
     font-weight: 600;
-    margin-bottom: 5px;
     color: #555;
+    margin-bottom: 5px;
+    font-size: 0.9em;
 }
-.campo input[type="text"], .text-input {
+
+input[type="text"],
+textarea.obs {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    font-family: inherit;
     font-size: 1em;
     box-sizing: border-box;
+    transition: border-color 0.2s;
 }
-.campo input[type="text"]:focus, .text-input:focus {
+
+input[type="text"]:focus,
+textarea.obs:focus {
     border-color: var(--orange);
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.2);
-    outline: none;
 }
-/* Alinha o texto do input da obs para cima */
-.text-input {
+
+textarea.obs {
     resize: vertical;
 }
 
 /* ======================================= */
-/* FOOTER INSTITUCIONAL */
+/* CARDS DO PEDIDO (INDEX.HTML) */
 /* ======================================= */
-.site-footer {
-    background: #4caf50; /* Verde escuro */
-    color: #e8f5e9;
-    text-align: center;
-    padding: 20px 16px 15px;
-    font-size: 0.8em;
-    line-height: 1.5;
-    margin-top: 30px;
+.cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
-.site-footer a {
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
+
+.order-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 5px solid var(--orange);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
-.site-footer a:hover {
-    text-decoration: underline;
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
 }
-.footer-credit {
-    margin-top: 10px;
-    font-style: italic;
+
+.order-title {
+    font-weight: 700;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.order-price {
+    font-weight: 700;
+    color: var(--color-success); /* VERDE ESCURO */
+    font-size: 1.2em;
+}
+
+.order-details p {
+    margin: 3px 0;
     font-size: 0.9em;
-    color: #c8e6c9;
+    color: #555;
 }
+
+.order-obs {
+    font-style: italic;
+    color: #777 !important;
+}
+
+.order-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.order-actions .btn {
+    width: auto;
+    padding: 5px 10px;
+    font-size: 0.85em;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.editar-item {
+    background-color: var(--blue);
+    color: white;
+}
+.editar-item:hover {
+    background-color: #1e88e5;
+}
+
+.excluir-item {
+    background-color: #777;
+    color: white;
+}
+.excluir-item:hover {
+    background-color: #555;
+}
+
+
+/* ======================================= */
+/* RESUMO GERAL (INDEX.HTML) */
+/* ======================================= */
+.resumo-box {
+    margin-top: 20px;
+    transition: transform 0.3s ease-out;
+}
+
+.resumo-box.animate {
+    /* Efeito sutil ao atualizar */
+    animation: pulse 0.3s ease-in-out; 
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.01); }
+  100% { transform: scale(1); }
+}
+
+.resumo-box .resumo-content {
+    white-space: pre-wrap;
+    font-family: monospace; /* Fonte mono para alinhamento */
+    font-size: 0.9em;
+    color: #333;
+    padding: 10px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px dashed #e0e0e0;
+}
+
+/* ======================================= */
+/* BARRA FIXA (REMOVIDA E OCULTADA) */
+/* ======================================= */
+.footer-bar {
+  display: none !important; 
+}
+
+/* ======================================= */
+/* ESTILOS RESUMO FINAL E CONFIRMAR */
+/* ======================================= */
+
+/* Container de ações dentro da resumo-box (Total + Confirmar) */
+.resumo-box .resumo-actions {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 15px !important;
+  padding-top: 10px !important;
+  border-top: 1px dashed #e0e0e0 !important;
+}
+
+/* Estilo para o total final na caixa de resumo */
+.resumo-total-final {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    color: var(--color-success) !important; /* VERDE ESCURO */
+    text-shadow: none !important;
+}
+
+
+/* Garante que o botão Confirmar na caixa de resumo tenha o estilo correto */
+.resumo-box button#confirmarPedidoResumo {
+    background: linear-gradient(135deg, var(--color-lime-light), var(--color-lime-dark)); /* VERDE LIMÃO */
+    color: #333; /* Cor do texto mais escura para melhor contraste */
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 15px;
+    box-shadow: 0 4px 8px rgba(175, 180, 43, 0.4); /* Sombra em tom de limão */
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.resumo-box button#confirmarPedidoResumo:disabled {
+  background: #e0e0e0 !important;
+  color: #999 !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+
+/* RESPONSIVIDADE */
+@media (max-width: 600px) {
+    .container {
+        padding: 0 10px;
+        margin-top: 20px;
+    }
+    
+    .delivery-details {
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.8em;
+    }
+    
+    .modern-title-text {
+        font-size: 1.8em;
+    }
+    
+    .modern-subtitle {
+        font-size: 1em;
+    }
+
+    /* Modal/Tela Cheia de Customização no Mobile */
+    .modal-content {
+        padding: 15px;
+        min-height: 100vh; /* Garante que preenche a altura total */
+    }
+
+    .close-modal {
+        top: 10px;
+        right: 10px;
+        z-index: 1002;
+    }
+
+    /* Manutenção do Layout Lateral para os Cards de Tamanho */
+    .size-card {
+        min-height: auto;
+        align-items: stretch;
+    }
+    
+    .card-image-wrapper {
+        width: 100px;
+        height: auto;
+        border-bottom-left-radius: 10px; 
+        border-top-right-radius: 0;
+    }
+    
+    .card-image-wrapper img {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        border-top-right-radius: 0;
+    }
+
+    .card-content {
+        padding: 10px 15px;
+    }
+
+    .size-name {
+        font-size: 1.2em;
+    }
+    
+    .size-price {
+        font-size: 1.2em;
+    }
+    
+    /* Ajuste do Resumo Final para Mobile (Total em cima, Botão embaixo) */
+    .resumo-box .resumo-actions {
+      flex-direction: column !important; 
+      gap: 10px !important;
+      align-items: stretch !important; /* Estica o botão Confirmar para 100% */
+    }
+    
+    .resumo-box button#confirmarPedidoResumo {
+      width: 100% !important;
+    }
+}
+
+/* ========================================= */
+/* ESTILOS PARA TELA DE CONFIRMAÇÃO (NOVO)   */
+/* ========================================= */
+
+/* Centraliza o Total e os botões na tela de confirmação */
+.confirmation-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente o conteúdo */
+    gap: 15px; /* Espaçamento entre os elementos */
+    padding: 20px 0 0; /* Espaçamento superior */
+    width: 100%; /* Garante que o container ocupe a largura total */
+}
+
+.confirmation-actions .resumo-total {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: var(--color-alert); /* Usando a cor de alerta para destaque do Total */
+    text-align: center; /* Garante que o texto Total a Pagar esteja centralizado */
+    width: 100%; 
+    padding: 5px 0;
+}
+
+/* Estilo para o botão do WhatsApp (Verde vibrante para destaque) */
+.btn-whatsapp {
+    background-color: #25D366; /* Verde do WhatsApp */
+    color: white;
+    font-weight: 600;
+    width: 100%; /* Ocupa a largura total do container */
+    max-width: 300px; /* Limita o tamanho máximo para não ficar muito largo */
+    padding: 12px 20px;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.btn-whatsapp:hover {
+    background-color: #128C7E;
+}
+
+/* MODIFICADO: Estilo para o botão de Voltar (Azul com Letra Branca) */
+.btn-voltar {
+    background-color: var(--blue); /* Usa a variável azul definida no :root */
+    color: white; /* Letra branca */
+    border: 1px solid var(--blue);
+    font-weight: 600; /* Mais destaque */
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 20px;
+    transition: background-color 0.2s;
+}
+
+.btn-voltar:hover {
+    background-color: #1e88e5; /* Um tom de azul mais escuro no hover */
+}
+
+
+@keyframes slideIn {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Rodapé institucional */
+.site-footer {
+  background: #fff3e0;
+  color: #333;
+  text-align: center;
+  padding: 25px 10px;
+  font-size: 0.95rem;
+  border-top: 2px solid #FFD700;
+}
+
+.site-footer a {
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.site-footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-credit {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* ======================================= */
+/* NOVO: ESTILOS PARA CAMPO DE OBSERVAÇÕES E CHIP */
+/* ======================================= */
+.text-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 80px; /* Altura mínima */
+}
+
+/* Ajuste a margem para o grupo que contém o textarea */
+.grupo-opcoes:has(.text-input) { 
+    margin-bottom: 20px;
+}
+
+/* Estilo para o chip de Observações no resumo */
+.chip-obs {
+    display: block; /* Ocupa a linha inteira */
+    background-color: var(--blue); /* Usa o azul para destaque */
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: 500;
+    white-space: pre-wrap; /* Preserva formatação e quebras de linha */
+}
+
 
 
 /* ======================================= */
@@ -807,8 +976,36 @@ body.store-closed #closed-overlay {
 #closed-overlay .btn {
   background: #ff9800;
   color: #fff;
-  padding: 12px 20px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
   margin-top: 20px;
-  font-size: 1.1rem;
-  width: auto; /* Permite que o botão se ajuste ao conteúdo */
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+#closed-overlay .btn:hover {
+  background: #e68900;
+}
+
+/* 📱 Centralização garantida no mobile */
+@media (max-width: 600px) {
+  #closed-overlay {
+    padding: 0 10px;
+    text-align: center;
+  }
+
+  #closed-overlay h2 {
+    font-size: 1.6rem;
+  }
+
+  #closed-overlay p {
+    font-size: 1rem;
+  }
+
+  #closed-overlay .btn {
+    font-size: 0.95rem;
+    padding: 10px 20px;
+  }
 }
