@@ -1009,3 +1009,46 @@ body.store-closed #closed-overlay {
     padding: 10px 20px;
   }
 }
+
+/* ===============================
+   NOVO CSS: Efeito de Rolagem Infinito
+=============================== */
+#splash-screen {
+    /* MUDANÇA: Necessário para empilhar a logo e a frase */
+    flex-direction: column; 
+    position: relative; 
+}
+
+.scrolling-phrase-container {
+    width: 300px; /* Largura do container para cortar a frase */
+    overflow: hidden; /* Esconde o texto que ultrapassa */
+    position: absolute; 
+    top: 60%; /* Ajuste a porcentagem para posicionar abaixo da logo */
+    white-space: nowrap; /* Mantém o texto na mesma linha */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: #000000;
+    padding: 5px 0;
+    border-radius: 4px;
+    z-index: 999;
+}
+
+.scrolling-phrase {
+    display: flex;
+    animation: scrollText 15s linear infinite; /* Aplica a animação */
+    align-items: center;
+}
+
+.phrase-text {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: #FFD21E; /* Cor amarela da sua logo para contraste */
+    text-transform: uppercase;
+    margin: 0 30px; /* Espaçamento entre as frases duplicadas */
+    display: inline-block;
+}
+
+@keyframes scrollText {
+    0% { transform: translateX(0); }
+    /* Move o elemento pela metade, fazendo a segunda frase aparecer */
+    100% { transform: translateX(-50%); } 
+}
