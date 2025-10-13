@@ -634,3 +634,24 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   }
 });
+
+
+
+// === AJUSTE FINAL: Splash garante animação entre páginas ===
+document.addEventListener('DOMContentLoaded', function() {
+  const splash = document.getElementById('splash-screen');
+
+  function showSplash(duration = 500) {
+    if (!splash) return;
+    splash.classList.add('active');
+    setTimeout(() => splash.classList.remove('active'), duration);
+  }
+
+  window.handlePageTransition = function(url) {
+    if (!url) return;
+    showSplash(500);
+    setTimeout(() => {
+      window.location.href = url;
+    }, 500);
+  };
+});
