@@ -1,42 +1,79 @@
 <!doctype html>
 <html lang="pt-BR" class="page-transition">
 <head>
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Delícias Tropicana - Menu</title>
   
   <link rel="manifest" href="/manifest.json">
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=14"> 
   
   <style>
-    /* 1. Transição de Entrada da Página */
+    /* ===============================
+       ANIMAÇÃO DE ENTRADA (SPLASH)
+    =============================== */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ffcc33, #ff6633);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOutSplash 1s ease 2.5s forwards;
+    }
+
+    #splash-screen img {
+      width: 150px;
+      animation: popIn 1.2s ease;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.2));
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeOutSplash {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* ===============================
+       TRANSIÇÃO DE CONTEÚDO
+    =============================== */
     .fade-page {
         opacity: 0;
-        transition: opacity 0.3s ease-in;
+        transition: opacity 0.6s ease-in;
     }
     .fade-page.loaded {
         opacity: 1;
     }
     
-    /* 2. Transição de Saída (Ao clicar para mudar de página) */
     .page-transition.fade-out .fade-page {
         opacity: 0;
         transition: opacity 0.3s ease-out;
     }
-    /* 3. Evita que o scroll apareça durante a transição */
+
     .page-transition.fade-out {
         overflow: hidden; 
     }
   </style>
-  
 </head>
+
 <body class="fade-page">
+
+  <!-- Tela de abertura estilo iFood -->
+  <div id="splash-screen">
+    <img src="icon-192.png" alt="Delícias Tropicana">
+  </div>
   
- <header class="main-header">
+  <header class="main-header">
     <div class="banner-image">
       <img src="image_2d4108.jpg" alt="Banner de Frutas Delícias Tropicana" loading="lazy">
     </div>
@@ -48,38 +85,35 @@
       <div class="delivery-details">
         <span>🕒 60-75min</span>
         <span>🛵 Consulte a taxa de entrega!</span>
-      <a href="https://www.instagram.com/deliciastropicana" class="more-details" target="_blank">
-  <strong>@deliciastropicana</strong>
-</a>
+        <a href="https://www.instagram.com/deliciastropicana" class="more-details" target="_blank">
+          <strong>@deliciastropicana</strong>
+        </a>
       </div>
     </div>
   </header>
   
- <div class="container">
-      
-      <div class="menu">
-          
-          <div class="modern-title-container">
-              <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
-              <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
-          </div>
-          <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;">
-          </div>
-          
-          <div class="section-card" id="seuPedidoCard"> 
-              <h3 class="section-title">Seu Pedido</h3>
-              
-              <div class="cards-container" id="cardsContainer">
-                  <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
-              </div>
-              
-              <div class="resumo-box" id="resumoBox">
-                  <p><strong>Resumo Detalhado:</strong></p>
-                  <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
-              </div>
+  <div class="container">
+    <div class="menu">
+      <div class="modern-title-container">
+          <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
+          <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
+      </div>
 
+      <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;"></div>
+      
+      <div class="section-card" id="seuPedidoCard"> 
+          <h3 class="section-title">Seu Pedido</h3>
+          
+          <div class="cards-container" id="cardsContainer">
+              <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
+          </div>
+          
+          <div class="resumo-box" id="resumoBox">
+              <p><strong>Resumo Detalhado:</strong></p>
+              <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
           </div>
       </div>
+    </div>
       
     <div id="customizationModal" class="modal-overlay">
       <div class="modal-content">
@@ -114,16 +148,27 @@
     </div>
   </div>
 
-<footer class="site-footer">
-  <p>🍍 <strong>Delícias Tropicana</strong></p>
-  <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta e Domingo 13:00h–17:00h</p>
-  <p>
-    <a href="https://wa.me/5565993321761" target="_blank">
-      📞 Fale Conosco pelo **WhatsApp**!
-    </a>
-  </p>
-  <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
-</footer>
+  <footer class="site-footer">
+    <p>🍍 <strong>Delícias Tropicana</strong></p>
+    <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta e Domingo 13:00h–17:00h</p>
+    <p>
+      <a href="https://wa.me/5565993321761" target="_blank">
+        📞 Fale Conosco pelo <strong>WhatsApp</strong>!
+      </a>
+    </p>
+    <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
+  </footer>
+
+  <script>
+    // Mostra conteúdo apenas após a animação do logo
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        document.body.classList.add("loaded");
+        const splash = document.getElementById("splash-screen");
+        if (splash) splash.style.display = "none";
+      }, 2800);
+    });
+  </script>
 
   <script src="app.js?v=14"></script>
 </body>
