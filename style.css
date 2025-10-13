@@ -1009,33 +1009,3 @@ body.store-closed #closed-overlay {
     padding: 10px 20px;
   }
 }
-
-
-/* === TRANSIÇÃO AMARELA GLOBAL (0.5s) === */
-#splash-screen {
-  position: fixed;
-  inset: 0;
-  background: #FFD21E;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-#splash-screen.active {
-  opacity: 1;
-  visibility: visible;
-}
-#splash-screen img {
-  width: 160px;
-  animation: logoBounce 1.8s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(0,0,0,0.2));
-}
-@keyframes logoBounce {
-  0%,100% { transform: scale(1) translateY(0); }
-  30% { transform: scale(1.1) translateY(-8px); }
-  50% { transform: scale(0.95) translateY(4px); }
-  70% { transform: scale(1.05) translateY(-4px); }
-}
