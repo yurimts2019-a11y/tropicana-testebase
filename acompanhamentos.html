@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR" class="page-transition">
+
+<body>
+  <!-- Splash/transition overlay will be created by transition.js -->
+  
+<section class="page-section">
+  <h1>Acompanhamentos</h1>
+  <div id="acompOpcoes" class="options-container"></div>
+  <div class="nav-buttons">
+    <button class="btn btn-secondary" id="voltarBtn">Voltar</button>
+    <button class="btn btn-primary" id="avancarBtn">Avançar</button>
+  </div>
+</section>
+
+  <footer class="site-footer">
+  <p>🍍 <strong>Delícias Tropicana</strong></p>
+  <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta 13:00h–17:00h</p>
+  <p>📞 WhatsApp: <a href="https://wa.me/5565993321761" target="_blank">Clique e mande uma mensagem!</a></p>
+  <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
+</footer>
+  <script src="transition.js"></script>
+  <script src="app.js?v=14"></script>
+  <script src="script.js?v=15"></script>
+  <script>
+    // attach navigation buttons to use animation
+    document.addEventListener('DOMContentLoaded', function(){
+      const voltar = document.getElementById('voltarBtn');
+      const avancar = document.getElementById('avancarBtn');
+      if(voltar){
+        voltar.addEventListener('click', function(e){
+          e.preventDefault();
+          const mapping = {'frutas.html':'index.html','adicionais.html':'frutas.html','acompanhamentos.html':'adicionais.html'};
+          const cur = 'acompanhamentos.html';
+          const prev = mapping[cur] || 'index.html';
+          navigateWithAnimation(prev);
+        });
+      }
+      if(avancar){
+        avancar.addEventListener('click', function(e){
+          e.preventDefault();
+          const mapping = {'frutas.html':'adicionais.html','adicionais.html':'acompanhamentos.html','acompanhamentos.html':'confirmacao.html'};
+          const cur = 'acompanhamentos.html';
+          const nxt = mapping[cur] || 'confirmacao.html';
+          navigateWithAnimation(nxt);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
