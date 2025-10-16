@@ -580,3 +580,29 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(checkStoreStatus, 60000); // Checa a cada minuto
     loadFromLocalStorage(); // <--- CARREGA O PEDIDO SALVO AO INICIAR
 });
+
+// ====== Transição de página com animação do splash ======
+document.addEventListener('DOMContentLoaded', function() {
+  const confirmarBtn = document.querySelector('#confirmarPedido');
+
+  if (confirmarBtn) {
+    confirmarBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Cria o splash dinamicamente (mesma estrutura da abertura)
+      const splash = document.createElement('div');
+      splash.id = 'splash-screen';
+      splash.innerHTML = `<img src="logo.png" alt="Delícias Tropicana">`;
+      document.body.appendChild(splash);
+
+      // Faz a animação igual à de abertura
+      splash.style.animation = 'fadeOutSplash 1s ease 2.8s forwards';
+      splash.querySelector('img').style.animation = 'logoBounce 2.5s ease-in-out infinite';
+
+      // Aguarda o tempo total da animação e redireciona
+      setTimeout(() => {
+        window.location.href = 'confirmacao.html';
+      }, 2800); // mesmo tempo da animação inicial
+    });
+  }
+});
