@@ -596,8 +596,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.appendChild(splash);
 
       // Faz a animação igual à de abertura
-      splash.style.animation = 'fadeOutSplash 1s ease 2.8s forwards';
-      splash.querySelector('img').style.animation = 'logoBounce 2.5s ease-in-out infinite';
+      splash.style.animation = 'fadeOutSplash 1s ease 1.8s forwards';
+      splash.querySelector('img').style.animation = 'logoBounce 1.5s ease-in-out infinite';
 
       // Aguarda o tempo total da animação e redireciona
       setTimeout(() => {
