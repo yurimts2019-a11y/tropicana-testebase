@@ -10,7 +10,40 @@
   <link rel="stylesheet" href="style.css?v=14"> 
   
   <style>
-    /* 1. Transição de Entrada da Página */
+    /* ===============================
+       ANIMAÇÃO DE ENTRADA (SPLASH)
+    =============================== */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #FFD21E;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeOutSplash 1s ease 2.8s forwards;
+    }
+    #splash-screen img {
+      width: 170px;
+      animation: logoBounce 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(0,0,0,0.15));
+    }
+    @keyframes logoBounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      30% { transform: scale(1.15) translateY(-10px); }
+      50% { transform: scale(0.95) translateY(5px); }
+      70% { transform: scale(1.05) translateY(-5px); }
+    }
+    @keyframes fadeOutSplash {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* ===============================
+       TRANSIÇÃO DE CONTEÚDO
+    =============================== */
     .fade-page {
         opacity: 0;
         transition: opacity 0.3s ease-in;
@@ -18,30 +51,26 @@
     .fade-page.loaded {
         opacity: 1;
     }
-    
-    /* 2. Transição de Saída (Ao clicar para mudar de página) */
     .page-transition.fade-out .fade-page {
         opacity: 0;
         transition: opacity 0.3s ease-out;
     }
-    /* 3. Evita que o scroll apareça durante a transição */
     .page-transition.fade-out {
         overflow: hidden; 
     }
 
-    /* ✅ NOVO: Estilos para o Resumo do Pedido */
+    /* ✅ Estilos do Resumo do Pedido */
     .resumo-content {
-        /* Define um espaçamento controlado entre os itens do pedido */
         display: flex;
         flex-direction: column;
-        gap: 15px; /* Espaçamento entre os itens */
+        gap: 15px;
         padding: 15px 0;
     }
     .resumo-item {
         font-size: 0.95rem;
         line-height: 1.4;
         padding-bottom: 10px;
-        border-bottom: 1px dotted #ccc; /* Linha de separação entre itens */
+        border-bottom: 1px dotted #ccc;
     }
     .resumo-item:last-child {
         border-bottom: none;
@@ -55,53 +84,63 @@
         font-weight: 600;
     }
     .item-price {
-        /* Usa a cor de alerta para destacar o preço (assumindo que 'style.css' define --color-alert) */
         color: var(--color-alert, #e53935); 
         font-size: 1rem;
     }
   </style>
-  
 </head>
+
 <body class="fade-page">
+  <!-- ✅ Splash Screen -->
+  <div id="splash-screen">
+    <img src="logo.png" alt="Delícias Tropicana">
+  </div>
+
   <main class="container">
     <section class="menu">
       <h2>✅ Quase lá! Confira seu Pedido:</h2>
 
       <div class="resumo-box section-card" id="resumoFinalContainer">
-          
-          <h3 class="section-title">Seu Nome:</h3>
-          <div class="campo"><span class="label">Nome</span>
-              <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
-          </div>
-          <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
-          
-          <h3 class="section-title">Resumo do Pedido:</h3>
-          <div id="resumoPedido" class="resumo-content"></div>
+        <h3 class="section-title">Seu Nome:</h3>
+        <div class="campo">
+          <span class="label">Nome</span>
+          <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
+        </div>
+        <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
+        
+        <h3 class="section-title">Resumo do Pedido:</h3>
+        <div id="resumoPedido" class="resumo-content"></div>
 
-          <div class="confirmation-actions"> 
-              <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
+        <div class="confirmation-actions"> 
+          <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
 
-              <button id="enviarPedido" class="btn btn-whatsapp">
-                  Enviar Pedido via WhatsApp
-              </button>
-              <button id="voltarMenu" class="btn btn-voltar">
-                  Voltar e Adicionar Mais Saladas
-              </button>
-          </div>
-
+          <button id="enviarPedido" class="btn btn-whatsapp">
+            Enviar Pedido via WhatsApp
+          </button>
+          <button id="voltarMenu" class="btn btn-voltar">
+            Voltar e Adicionar Mais Saladas
+          </button>
+        </div>
       </div>
     </section>
   </main>
 
   <script>
-    // A função handlePageTransition deve ser exposta globalmente em app.js
-    // Se não estiver, esta linha pode falhar, mas deve funcionar se o app.js estiver carregado primeiro
+    // Mantém a função handlePageTransition existente
     if(typeof handlePageTransition !== 'function') {
         window.handlePageTransition = function(url) {
             document.documentElement.classList.add('fade-out');
             setTimeout(() => { window.location.href = url; }, 300);
         };
     }
+
+    // Exibe a animação de splash ao carregar a página
+    document.addEventListener('DOMContentLoaded', () => {
+      const splash = document.getElementById('splash-screen');
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 2800); // Mesmo tempo da animação inicial
+    });
 
     // Variável global para o telefone
     const phone = '5565993321761'; 
@@ -123,99 +162,50 @@
         return totalPedido;
     }
 
-// ======================================================
-// FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (CORRIGIDA)
-// ======================================================
-const getWhatsappText = (total) => {
-    // Recupera os pedidos do localStorage
-    const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
-    const name = localStorage.getItem('tropicanaName') || 'Cliente';
+    // ======================================================
+    // FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP
+    // ======================================================
+    const getWhatsappText = (total) => {
+        const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
+        const name = localStorage.getItem('tropicanaName') || 'Cliente';
+        let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`;
+        text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`;
+        pedidos.forEach((item, index) => {
+            const precoUnitario = item.tamanho.preco;
+            text += `ITEM ${index + 1}\n`; 
+            text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
+            if (item.fruits?.length) {
+                text += `\n*Frutas (Grátis):*\n`;
+                item.fruits.forEach(fruta => text += `• ${fruta.nome}\n`);
+            }
+            if (item.extras?.length) {
+                text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`;
+                item.extras.forEach(extra => text += `• ${extra.nome}\n`);
+            }
+            if (item.acomp?.length) {
+                text += `\n*Acompanhamentos (Grátis):*\n`;
+                item.acomp.forEach(acomp => text += `* ${acomp.nome}\n`);
+            }
+            const obs = item.observacoes || item.obs;
+            if (obs?.trim() !== '') text += `\n*Observações*: ${obs.trim().replace(/\n/g, ' ')}\n`;
+            text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`;
+            text += `---------------------------------\n`; 
+        });
+        text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n*Obrigado!*`;
+        text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
+        return text;
+    };
 
-    // 1. Início da Mensagem (NOVO FORMATO LIMPO COM NEGRITO NO TÍTULO E NOME)
-    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`; // Dupla quebra para separar o título da mensagem
-    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`; // Dupla quebra para separar a introdução do primeiro item
-    
-    // 2. Loop pelos itens do pedido
-    pedidos.forEach((item, index) => {
-        const precoUnitario = item.tamanho.preco;
-
-        // Título do Item - AGORA COM APENAS UMA QUEBRA DE LINHA NO FINAL
-        text += `ITEM ${index + 1}\n`; 
-        
-        // Tamanho e Preço
-        text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
-        
-        // Categoria 1: Frutas (Grátis)
-        if (item.fruits && item.fruits.length > 0) {
-            // Usa dupla quebra para separar o item.tamanho da categoria
-            text += `\n*Frutas (Grátis):*\n`; 
-            item.fruits.forEach(fruta => {
-                text += `• ${fruta.nome}\n`;
-            });
-        }
-
-        // Categoria 2: Adicionais de Frutas (Extras Pagos)
-        if (item.extras && item.extras.length > 0) {
-            text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
-            item.extras.forEach(extra => {
-                text += `• ${extra.nome}\n`;
-            });
-        }
-
-        // Categoria 3: Acompanhamentos (Grátis)
-        if (item.acomp && item.acomp.length > 0) {
-            text += `\n*Acompanhamentos (Grátis):*\n`; 
-            item.acomp.forEach(acomp => {
-                // NOTA: Os seus acompanhamentos estavam usando '*' em vez de '•'. Mantenho o '*' se for sua preferência.
-                text += `* ${acomp.nome}\n`; 
-            });
-        }
-        
-        // Observação (Se existir) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
-        const obs = item.observacoes || item.obs;
-        if (obs && obs.trim() !== '') {
-            const obsLimpa = obs.trim().replace(/\n/g, ' '); 
-            // Agora o título "Observação" aparece em negrito no WhatsApp
-            text += `\n*Observações*: ${obsLimpa}\n`;
-        }
-        
-        // Subtotal do Item - REMOVIDO ESPAÇO EXTRA ANTES, DEIXANDO APENAS UM NOVO PARÁGRAFO DE ESPAÇAMENTO
-        text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
-        
-        // Linha de separação entre itens
-        text += `---------------------------------\n`; 
-    });
-
-    // 3. Rodapé
-    // Dupla quebra de linha para separar o rodapé do último item.
-    text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
-    text += `*Obrigado!*`; 
-
-    // Adiciona o valor total no final da mensagem do WhatsApp
-    text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
-
-    // 4. Retorna a mensagem formatada
-    return text;
-};
-
-// ======================================================
-// FUNÇÃO loadAndDisplayOrder (CORRIGIDA)
-// ======================================================
+    // ======================================================
+    // FUNÇÃO PRINCIPAL DE CARREGAMENTO
+    // ======================================================
     function loadAndDisplayOrder() {
-        
-        // 1. RECUPERAÇÃO DE DADOS
         const pedidosJSON = localStorage.getItem('tropicanaPedidos');
         const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
-
-        // 2. REFERÊNCIAS DO DOM
         const resumoPedidoDiv = document.getElementById('resumoPedido');
         const totalAPagarDiv = document.getElementById('totalAPagar');
         const nameInput = document.getElementById('nameInputFinal');
-        
-        // 3. RECUPERAÇÃO DE DADOS (Nome)
         nameInput.value = localStorage.getItem('tropicanaName') || '';
-        
-        // 4. CÁLCULO E EXIBIÇÃO
         let resumoTexto = '';
         let totalPedido = 0;
 
@@ -226,82 +216,52 @@ const getWhatsappText = (total) => {
             return;
         }
 
-        // GERAÇÃO DE HTML E ESTRUTURA PARA FORMATAR NO NAVEGADOR
         resumoTexto += pedidos.map((item, index) => {
             const totalItem = item.total; 
-            
-            // Inicia o container do item (que será separado pelo CSS)
-            let linha = `<div class="resumo-item">`;
-            
-            // Título: 1x Salada #N (Tamanho)
-            linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
-            
+            let linha = `<div class="resumo-item"><strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
             let detalhes = [];
-
-            // Frutas (Checa se o array existe e se tem conteúdo)
-            if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
-            // Adicionais (Checa se o array existe e se tem conteúdo)
-            if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
-            // Acompanhamentos (Checa se o array existe e se tem conteúdo)
-            if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
-            
-            // Observação (Checa se existe) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
+            if (item.fruits?.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
+            if (item.extras?.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
+            if (item.acomp?.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
             const obs = item.observacoes || item.obs;
             if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
-            
-            // Junta os detalhes usando o separador com classe CSS
             linha += detalhes.join(' <span class="separator">|</span> ');
-            
-            // Preço total do item
-            linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
-            
-            // Fecha o container do item
-            linha += `</div>`; 
-
+            linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong></div>`; 
             totalPedido += totalItem;
             return linha;
-        }).join(''); // Não usa separador no join, pois o <div> já cria a separação
-
-        resumoPedidoDiv.innerHTML = resumoTexto; // Usa innerHTML para renderizar o HTML
+        }).join('');
+        
+        resumoPedidoDiv.innerHTML = resumoTexto;
         totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
 
-        // 5. LISTENERS
+        // Botão WhatsApp
         document.getElementById('enviarPedido').addEventListener('click', () => {
-             // 5.1 Validar campos
             if (nameInput.value.trim() === '') {
                 alert('Por favor, preencha seu nome.');
                 return;
             }
-             // 5.2 Salvar Nome
             localStorage.setItem('tropicanaName', nameInput.value.trim());
-
             const totalPedido = calcularTotalGeral();
-            // 5.3 Gera o texto para o WhatsApp com a nova formatação
             let whatsappText = getWhatsappText(totalPedido);
-
-            // ✅ REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
             whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
-
-
-            // 5.4 Salva a mensagem no storage e redireciona para a tela de sucesso
             localStorage.setItem('pedidoWhatsApp', whatsappText);
-
-            // 5.5 Limpa o localStorage de pedido (VOLTA À ESTACA ZERO)
             localStorage.removeItem('tropicanaPedidos');
             localStorage.removeItem('tropicanaName');
-            
-            // 5.6 Redireciona para a tela de sucesso
             handlePageTransition('sucesso.html'); 
         });
 
-        // Listener para o botão de Voltar
-        document.getElementById('voltarMenu').addEventListener('click', () => {
-             // Salva o nome antes de voltar
-             localStorage.setItem('tropicanaName', nameInput.value.trim());
-             handlePageTransition('index.html');
+        // Botão Voltar (mantém animação splash)
+        document.getElementById('voltarMenu').addEventListener('click', (e) => {
+          e.preventDefault();
+          const splash = document.createElement('div');
+          splash.id = 'splash-screen';
+          splash.innerHTML = `<img src="logo.png" alt="Delícias Tropicana">`;
+          document.body.appendChild(splash);
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 2800);
         });
-        
-        // Listener para persistir nome no localStorage
+
         nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
     }
 
