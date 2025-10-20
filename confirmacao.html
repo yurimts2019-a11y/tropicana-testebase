@@ -1,314 +1,459 @@
 <!doctype html>
 <html lang="pt-BR" class="page-transition">
 <head>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Confirmação de Pedido - Delícias Tropicana</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14"> 
-  
-  <style>
-    /* 1. Transição de Entrada da Página */
-    .fade-page {
-        opacity: 0;
-        transition: opacity 0.3s ease-in;
-    }
-    .fade-page.loaded {
-        opacity: 1;
-    }
-    
-    /* 2. Transição de Saída (Ao clicar para mudar de página) */
-    .page-transition.fade-out .fade-page {
-        opacity: 0;
-        transition: opacity 0.3s ease-out;
-    }
-    /* 3. Evita que o scroll apareça durante a transição */
-    .page-transition.fade-out {
-        overflow: hidden; 
-    }
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Confirmação de Pedido - Delícias Tropicana</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=14"> 
+  
+  <style>
+    /* 1. Transição de Entrada da Página */
+    .fade-page {
+        opacity: 0;
+        transition: opacity 0.3s ease-in;
+    }
+    .fade-page.loaded {
+        opacity: 1;
+    }
+    
+    /* 2. Transição de Saída (Ao clicar para mudar de página) */
+    .page-transition.fade-out .fade-page {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+    }
+    /* 3. Evita que o scroll apareça durante a transição */
+    .page-transition.fade-out {
+        overflow: hidden; 
+    }
 
-    /* ✅ NOVO: Estilos para o Resumo do Pedido */
-    .resumo-content {
-        /* Define um espaçamento controlado entre os itens do pedido */
+    /* ✅ NOVO: Estilos para o Resumo do Pedido */
+    .resumo-content {
+        /* Define um espaçamento controlado entre os itens do pedido */
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Espaçamento entre os itens */
+        padding: 15px 0;
+    }
+    .resumo-item {
+        font-size: 0.95rem;
+        line-height: 1.4;
+        padding-bottom: 10px;
+        border-bottom: 1px dotted #ccc; /* Linha de separação entre itens */
+    }
+    .resumo-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .separator {
+        color: #999;
+        margin: 0 5px;
+    }
+    .detail-label {
+        font-weight: 600;
+    }
+    .item-price {
+        /* Usa a cor de alerta para destacar o preço (assumindo que 'style.css' define --color-alert) */
+        color: var(--color-alert, #e53935); 
+        font-size: 1rem;
+    }
+
+    /* =======================================
+     * NOVO: ESTILOS DO CARTÃO FIDELIDADE
+     * ======================================= */
+    .fidelidade-card {
+        background: #FFEB3B; /* Amarelo da logo (cor de destaque) */
+        padding: 20px;
+        border-radius: 12px;
+        margin: 25px 0; /* Espaço antes e depois do cartão */
+        border: 2px solid #FFD740;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .fidelidade-card h3 {
+        margin-top: 0;
+        color: #222;
+        font-size: 1.3rem;
+    }
+    .selos-container {
         display: flex;
-        flex-direction: column;
-        gap: 15px; /* Espaçamento entre os itens */
-        padding: 15px 0;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 15px 0 20px;
     }
-    .resumo-item {
-        font-size: 0.95rem;
-        line-height: 1.4;
-        padding-bottom: 10px;
-        border-bottom: 1px dotted #ccc; /* Linha de separação entre itens */
+    .selo {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background-color: #eee;
+        border: 2px solid #ccc;
+        line-height: 31px;
+        font-weight: 700;
+        color: #ccc;
+        font-size: 0.9em;
+        transition: all 0.2s ease;
     }
-    .resumo-item:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
+    .selo.earned {
+        background-color: #4CAF50; /* Verde de sucesso */
+        border-color: #388e3c;
+        color: white;
     }
-    .separator {
-        color: #999;
-        margin: 0 5px;
+    #btnResgate.btn-whatsapp {
+        background-color: #4CAF50;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s;
     }
-    .detail-label {
-        font-weight: 600;
+    #btnResgate:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
     }
-    .item-price {
-        /* Usa a cor de alerta para destacar o preço (assumindo que 'style.css' define --color-alert) */
-        color: var(--color-alert, #e53935); 
-        font-size: 1rem;
-    }
-  </style>
-  
+</style>
+  
 </head>
 <body class="fade-page">
-  <main class="container">
-    <section class="menu">
-      <h2>✅ Quase lá! Confira seu Pedido:</h2>
+  <main class="container">
+    <section class="menu">
+      <h2>✅ Quase lá! Confira seu Pedido:</h2>
 
-      <div class="resumo-box section-card" id="resumoFinalContainer">
-          
-          <h3 class="section-title">Seu Nome</h3>
-        <div class="campo">
-              <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
-          </div>
-          <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
-          
-          <h3 class="section-title">Resumo do Pedido</h3>
-          <div id="resumoPedido" class="resumo-content"></div>
+      <div class="resumo-box section-card" id="resumoFinalContainer">
+          
+          <h3 class="section-title">Seu Nome</h3>
+        <div class="campo">
+              <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
+          </div>
+          <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
+          
+          <h3 class="section-title">Resumo do Pedido</h3>
+          <div id="resumoPedido" class="resumo-content"></div>
 
-          <div class="confirmation-actions"> 
-              <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
+            <div id="fidelidadeCard" class="fidelidade-card">
+                <h3>Cartão Fidelidade 🍍</h3>
+                <p id="selosStatus">Você tem <strong>0</strong> selos de 10.</p>
+                <div id="selosContainer" class="selos-container">
+                    </div>
+                <button id="btnResgate" class="btn" disabled>
+                    Complete 10 selos para ganhar uma Salada GRÁTIS!
+                </button>
+            </div>
+                      <div class="confirmation-actions"> 
+              <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
 
-              <button id="enviarPedido" class="btn btn-whatsapp">
-                  Enviar Pedido via WhatsApp
-              </button>
-              <button id="voltarMenu" class="btn btn-voltar">
-                  Voltar e Adicionar Mais Saladas
-              </button>
-          </div>
+              <button id="enviarPedido" class="btn btn-whatsapp">
+                  Enviar Pedido via WhatsApp
+              </button>
+              <button id="voltarMenu" class="btn btn-voltar">
+                  Voltar e Adicionar Mais Saladas
+              </button>
+          </div>
 
-      </div>
-    </section>
-  </main>
+      </div>
+    </section>
+  </main>
 
-  <script>
-    // A função handlePageTransition deve ser exposta globalmente em app.js
-    // Se não estiver, esta linha pode falhar, mas deve funcionar se o app.js estiver carregado primeiro
-    if(typeof handlePageTransition !== 'function') {
-        window.handlePageTransition = function(url) {
-            document.documentElement.classList.add('fade-out');
-            setTimeout(() => { window.location.href = url; }, 300);
-        };
+  <script>
+    // A função handlePageTransition deve ser exposta globalmente em app.js
+    // Se não estiver, esta linha pode falhar, mas deve funcionar se o app.js estiver carregado primeiro
+    if(typeof handlePageTransition !== 'function') {
+        window.handlePageTransition = function(url) {
+            document.documentElement.classList.add('fade-out');
+            setTimeout(() => { window.location.href = url; }, 300);
+        };
+    }
+
+    // Variável global para o telefone
+    const phone = '5565993321761'; 
+
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value);
+    };
+
+    function calcularTotalGeral() {
+        const pedidosJSON = localStorage.getItem('tropicanaPedidos');
+        const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
+        let totalPedido = 0;
+        pedidos.forEach(item => {
+            totalPedido += item.total;
+        });
+        return totalPedido;
+    }
+
+    // ======================================================
+    // NOVO: FUNÇÕES DE FIDELIDADE (DEVE ESTAR EM app.js OU GLOBALMENTE)
+    // ======================================================
+    const MAX_SEALS = 10;
+
+    function getFidelidadeSelos() {
+        const selos = localStorage.getItem('fidelidade_selos');
+        return parseInt(selos) || 0;
+    }
+    
+    function addFidelidadeSelo() {
+        let selos = getFidelidadeSelos();
+        if (selos < MAX_SEALS) {
+            selos++;
+            localStorage.setItem('fidelidade_selos', selos);
+            console.log(`[FIDELIDADE] Selo adicionado! Total: ${selos}/${MAX_SEALS}`);
+        }
     }
 
-    // Variável global para o telefone
-    const phone = '5565993321761'; 
-
-    const formatCurrency = (value) => {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(value);
-    };
-
-    function calcularTotalGeral() {
-        const pedidosJSON = localStorage.getItem('tropicanaPedidos');
-        const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
-        let totalPedido = 0;
-        pedidos.forEach(item => {
-            totalPedido += item.total;
-        });
-        return totalPedido;
+    function resetFidelidadeSelos() {
+        localStorage.setItem('fidelidade_selos', 0);
+        console.log('[FIDELIDADE] Selos zerados após resgate.');
     }
 
 // ======================================================
 // FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (CORRIGIDA)
 // ======================================================
 const getWhatsappText = (total) => {
-    // Recupera os pedidos do localStorage
-    const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
-    const name = localStorage.getItem('tropicanaName') || 'Cliente';
+    // Recupera os pedidos do localStorage
+    const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
+    const name = localStorage.getItem('tropicanaName') || 'Cliente';
 
-    // 1. Início da Mensagem (NOVO FORMATO LIMPO COM NEGRITO NO TÍTULO E NOME)
-    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`; // Dupla quebra para separar o título da mensagem
-    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`; // Dupla quebra para separar a introdução do primeiro item
-    
-    // 2. Loop pelos itens do pedido
-    pedidos.forEach((item, index) => {
-        const precoUnitario = item.tamanho.preco;
+    // 1. Início da Mensagem (NOVO FORMATO LIMPO COM NEGRITO NO TÍTULO E NOME)
+    let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`; // Dupla quebra para separar o título da mensagem
+    text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`; // Dupla quebra para separar a introdução do primeiro item
+    
+    // 2. Loop pelos itens do pedido
+    pedidos.forEach((item, index) => {
+        const precoUnitario = item.tamanho.preco;
 
-        // Título do Item - AGORA COM APENAS UMA QUEBRA DE LINHA NO FINAL
-        text += `ITEM ${index + 1}\n`; 
-        
-        // Tamanho e Preço
-        text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
-        
-        // Categoria 1: Frutas (Grátis)
-        if (item.fruits && item.fruits.length > 0) {
-            // Usa dupla quebra para separar o item.tamanho da categoria
-            text += `\n*Frutas (Grátis):*\n`; 
-            item.fruits.forEach(fruta => {
-                text += `• ${fruta.nome}\n`;
-            });
-        }
+        // Título do Item - AGORA COM APENAS UMA QUEBRA DE LINHA NO FINAL
+        text += `ITEM ${index + 1}\n`; 
+        
+        // Tamanho e Preço
+        text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
+        
+        // Categoria 1: Frutas (Grátis)
+        if (item.fruits && item.fruits.length > 0) {
+            // Usa dupla quebra para separar o item.tamanho da categoria
+            text += `\n*Frutas (Grátis):*\n`; 
+            item.fruits.forEach(fruta => {
+                text += `• ${fruta.nome}\n`;
+            });
+        }
 
-        // Categoria 2: Adicionais de Frutas (Extras Pagos)
-        if (item.extras && item.extras.length > 0) {
-            text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
-            item.extras.forEach(extra => {
-                text += `• ${extra.nome}\n`;
-            });
-        }
+        // Categoria 2: Adicionais de Frutas (Extras Pagos)
+        if (item.extras && item.extras.length > 0) {
+            text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
+            item.extras.forEach(extra => {
+                text += `• ${extra.nome}\n`;
+            });
+        }
 
-        // Categoria 3: Acompanhamentos (Grátis)
-        if (item.acomp && item.acomp.length > 0) {
-            text += `\n*Acompanhamentos (Grátis):*\n`; 
-            item.acomp.forEach(acomp => {
-                // NOTA: Os seus acompanhamentos estavam usando '*' em vez de '•'. Mantenho o '*' se for sua preferência.
-                text += `* ${acomp.nome}\n`; 
-            });
-        }
-        
-        // Observação (Se existir) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
-        const obs = item.observacoes || item.obs;
-        if (obs && obs.trim() !== '') {
-            const obsLimpa = obs.trim().replace(/\n/g, ' '); 
-            // Agora o título "Observação" aparece em negrito no WhatsApp
-            text += `\n*Observações*: ${obsLimpa}\n`;
-        }
-        
-        // Subtotal do Item - REMOVIDO ESPAÇO EXTRA ANTES, DEIXANDO APENAS UM NOVO PARÁGRAFO DE ESPAÇAMENTO
-        text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
-        
-        // Linha de separação entre itens
-        text += `---------------------------------\n`; 
-    });
+        // Categoria 3: Acompanhamentos (Grátis)
+        if (item.acomp && item.acomp.length > 0) {
+            text += `\n*Acompanhamentos (Grátis):*\n`; 
+            item.acomp.forEach(acomp => {
+                // NOTA: Os seus acompanhamentos estavam usando '*' em vez de '•'. Mantenho o '*' se for sua preferência.
+                text += `* ${acomp.nome}\n`; 
+            });
+        }
+        
+        // Observação (Se existir) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
+        const obs = item.observacoes || item.obs;
+        if (obs && obs.trim() !== '') {
+            const obsLimpa = obs.trim().replace(/\n/g, ' '); 
+            // Agora o título "Observação" aparece em negrito no WhatsApp
+            text += `\n*Observações*: ${obsLimpa}\n`;
+        }
+        
+        // Subtotal do Item - REMOVIDO ESPAÇO EXTRA ANTES, DEIXANDO APENAS UM NOVO PARÁGRAFO DE ESPAÇAMENTO
+        text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
+        
+        // Linha de separação entre itens
+        text += `---------------------------------\n`; 
+    });
 
-    // 3. Rodapé
-    // Dupla quebra de linha para separar o rodapé do último item.
-    text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
-    text += `*Obrigado!*`; 
+    // 3. Rodapé
+    // Dupla quebra de linha para separar o rodapé do último item.
+    text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
+    text += `*Obrigado!*`; 
 
-    // Adiciona o valor total no final da mensagem do WhatsApp
-    text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
+    // Adiciona o valor total no final da mensagem do WhatsApp
+    text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
 
-    // 4. Retorna a mensagem formatada
-    return text;
+    // 4. Retorna a mensagem formatada
+    return text;
 };
 
 // ======================================================
-// FUNÇÃO loadAndDisplayOrder (CORRIGIDA)
+// FUNÇÃO loadAndDisplayOrder (AGORA INCLUI O FIDELIDADE)
 // ======================================================
-    function loadAndDisplayOrder() {
-        
-        // 1. RECUPERAÇÃO DE DADOS
-        const pedidosJSON = localStorage.getItem('tropicanaPedidos');
-        const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
+    function loadAndDisplayOrder() {
+        
+        // 1. RECUPERAÇÃO DE DADOS
+        const pedidosJSON = localStorage.getItem('tropicanaPedidos');
+        const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
 
-        // 2. REFERÊNCIAS DO DOM
-        const resumoPedidoDiv = document.getElementById('resumoPedido');
-        const totalAPagarDiv = document.getElementById('totalAPagar');
-        const nameInput = document.getElementById('nameInputFinal');
-        
-        // 3. RECUPERAÇÃO DE DADOS (Nome)
-        nameInput.value = localStorage.getItem('tropicanaName') || '';
-        
-        // 4. CÁLCULO E EXIBIÇÃO
-        let resumoTexto = '';
-        let totalPedido = 0;
+        // 2. REFERÊNCIAS DO DOM
+        const resumoPedidoDiv = document.getElementById('resumoPedido');
+        const totalAPagarDiv = document.getElementById('totalAPagar');
+        const nameInput = document.getElementById('nameInputFinal');
+        
+        // 3. RECUPERAÇÃO DE DADOS (Nome)
+        nameInput.value = localStorage.getItem('tropicanaName') || '';
+        
+        // 4. CÁLCULO E EXIBIÇÃO
+        let resumoTexto = '';
+        let totalPedido = 0;
 
-        if (pedidos.length === 0) {
-            resumoPedidoDiv.textContent = 'Nenhum pedido encontrado. Voltando ao menu...';
-            totalAPagarDiv.textContent = 'TOTAL: R$0,00';
-            handlePageTransition('index.html');
-            return;
-        }
+        if (pedidos.length === 0) {
+            resumoPedidoDiv.textContent = 'Nenhum pedido encontrado. Voltando ao menu...';
+            totalAPagarDiv.textContent = 'TOTAL: R$0,00';
+            handlePageTransition('index.html');
+            return;
+        }
 
-        // GERAÇÃO DE HTML E ESTRUTURA PARA FORMATAR NO NAVEGADOR
-        resumoTexto += pedidos.map((item, index) => {
-            const totalItem = item.total; 
-            
-            // Inicia o container do item (que será separado pelo CSS)
-            let linha = `<div class="resumo-item">`;
-            
-            // Título: 1x Salada #N (Tamanho)
-            linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
-            
-            let detalhes = [];
+        // GERAÇÃO DE HTML E ESTRUTURA PARA FORMATAR NO NAVEGADOR
+        resumoTexto += pedidos.map((item, index) => {
+            const totalItem = item.total; 
+            
+            // Inicia o container do item (que será separado pelo CSS)
+            let linha = `<div class="resumo-item">`;
+            
+            // Título: 1x Salada #N (Tamanho)
+            linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
+            
+            let detalhes = [];
 
-            // Frutas (Checa se o array existe e se tem conteúdo)
-            if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
-            // Adicionais (Checa se o array existe e se tem conteúdo)
-            if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
-            // Acompanhamentos (Checa se o array existe e se tem conteúdo)
-            if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
-            
-            // Observação (Checa se existe) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
-            const obs = item.observacoes || item.obs;
-            if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
-            
-            // Junta os detalhes usando o separador com classe CSS
-            linha += detalhes.join(' <span class="separator">|</span> ');
-            
-            // Preço total do item
-            linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
-            
-            // Fecha o container do item
-            linha += `</div>`; 
+            // Frutas (Checa se o array existe e se tem conteúdo)
+            if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
+            // Adicionais (Checa se o array existe e se tem conteúdo)
+            if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
+            // Acompanhamentos (Checa se o array existe e se tem conteúdo)
+            if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
+            
+            // Observação (Checa se existe) - ✅ CORRIGIDO: Checa por 'observacoes' e 'obs'
+            const obs = item.observacoes || item.obs;
+            if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
+            
+            // Junta os detalhes usando o separador com classe CSS
+            linha += detalhes.join(' <span class="separator">|</span> ');
+            
+            // Preço total do item
+            linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
+            
+            // Fecha o container do item
+            linha += `</div>`; 
 
-            totalPedido += totalItem;
-            return linha;
-        }).join(''); // Não usa separador no join, pois o <div> já cria a separação
+            totalPedido += totalItem;
+            return linha;
+        }).join(''); // Não usa separador no join, pois o <div> já cria a separação
 
-        resumoPedidoDiv.innerHTML = resumoTexto; // Usa innerHTML para renderizar o HTML
-        totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
+        resumoPedidoDiv.innerHTML = resumoTexto; // Usa innerHTML para renderizar o HTML
+        totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
 
-        // 5. LISTENERS
-        document.getElementById('enviarPedido').addEventListener('click', () => {
-             // 5.1 Validar campos
-            if (nameInput.value.trim() === '') {
-                alert('Por favor, preencha seu nome.');
-                return;
+        // 5. LISTENERS
+        document.getElementById('enviarPedido').addEventListener('click', () => {
+             // 5.1 Validar campos
+            if (nameInput.value.trim() === '') {
+                alert('Por favor, preencha seu nome.');
+                return;
+            }
+             // 5.2 Salvar Nome
+            localStorage.setItem('tropicanaName', nameInput.value.trim());
+
+            const totalPedido = calcularTotalGeral();
+            // 5.3 Gera o texto para o WhatsApp com a nova formatação
+            let whatsappText = getWhatsappText(totalPedido);
+
+            // ✅ NOVO: Adiciona o selo de fidelidade ao finalizar o pedido
+            addFidelidadeSelo(); 
+
+            // ✅ REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
+            whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
+
+
+            // 5.4 Salva a mensagem no storage e redireciona para a tela de sucesso
+            localStorage.setItem('pedidoWhatsApp', whatsappText);
+
+            // 5.5 Limpa o localStorage de pedido (VOLTA À ESTACA ZERO)
+            localStorage.removeItem('tropicanaPedidos');
+            localStorage.removeItem('tropicanaName');
+            
+            // 5.6 Redireciona para a tela de sucesso
+            handlePageTransition('sucesso.html'); 
+        });
+
+        // Listener para o botão de Voltar
+        document.getElementById('voltarMenu').addEventListener('click', () => {
+             // Salva o nome antes de voltar
+             localStorage.setItem('tropicanaName', nameInput.value.trim());
+             handlePageTransition('index.html');
+        });
+        
+        // Listener para persistir nome no localStorage
+        nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
+
+        // ======================================================
+        // INÍCIO: LÓGICA DE EXIBIÇÃO DO CARTÃO FIDELIDADE
+        // ======================================================
+        const selosAtuais = getFidelidadeSelos();
+        const container = document.getElementById('selosContainer');
+        const statusText = document.getElementById('selosStatus');
+        const btnResgate = document.getElementById('btnResgate');
+
+        if (container) { 
+            // 1. Atualiza o status
+            statusText.innerHTML = `Você tem <strong>${selosAtuais}</strong> selos de ${MAX_SEALS}.`;
+
+            // 2. Desenha os selos
+            for (let i = 1; i <= MAX_SEALS; i++) {
+                const seloDiv = document.createElement('div');
+                seloDiv.className = 'selo';
+                if (i <= selosAtuais) {
+                    seloDiv.classList.add('earned');
+                    seloDiv.textContent = '✓';
+                } else {
+                    seloDiv.textContent = i;
+                }
+                container.appendChild(seloDiv);
             }
-             // 5.2 Salvar Nome
-            localStorage.setItem('tropicanaName', nameInput.value.trim());
 
-            const totalPedido = calcularTotalGeral();
-            // 5.3 Gera o texto para o WhatsApp com a nova formatação
-            let whatsappText = getWhatsappText(totalPedido);
+            // 3. Lógica do botão de resgate
+            if (selosAtuais >= MAX_SEALS) {
+                btnResgate.disabled = false;
+                btnResgate.classList.add('btn-whatsapp'); 
+                btnResgate.textContent = '🎉 RESGATE SEU PRÊMIO GRÁTIS AGORA! 🎉';
+                
+                btnResgate.addEventListener('click', function() {
+                    if (confirm('Ao resgatar, seus selos serão zerados e uma mensagem será enviada ao WhatsApp. Deseja continuar?')) {
+                        // Gera um código simples para verificação manual
+                        const codigoResgate = 'DT' + Math.floor(Date.now() / 1000); 
+                        const mensagem = `Olá! Quero resgatar minha Salada de Frutas GRÁTIS do Cartão Fidelidade. Meu código de resgate é: ${codigoResgate}`;
+                        const urlWhatsApp = `https://wa.me/${phone}?text=${encodeURIComponent(mensagem)}`;
+                        
+                        // Zera os selos no LocalStorage
+                        resetFidelidadeSelos();
 
-            // ✅ REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
-            whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
-
-
-            // 5.4 Salva a mensagem no storage e redireciona para a tela de sucesso
-            localStorage.setItem('pedidoWhatsApp', whatsappText);
-
-            // 5.5 Limpa o localStorage de pedido (VOLTA À ESTACA ZERO)
-            localStorage.removeItem('tropicanaPedidos');
-            localStorage.removeItem('tropicanaName');
-            
-            // 5.6 Redireciona para a tela de sucesso
-            handlePageTransition('sucesso.html'); 
-        });
-
-        // Listener para o botão de Voltar
-        document.getElementById('voltarMenu').addEventListener('click', () => {
-             // Salva o nome antes de voltar
-             localStorage.setItem('tropicanaName', nameInput.value.trim());
-             handlePageTransition('index.html');
-        });
-        
-        // Listener para persistir nome no localStorage
-        nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
+                        // Abre o WhatsApp
+                        window.open(urlWhatsApp, '_blank');
+                        
+                        // Redireciona de volta ao menu após o resgate
+                        setTimeout(() => {
+                           handlePageTransition('index.html');
+                        }, 1000);
+                    }
+                });
+            }
+        }
+        // ======================================================
+        // FIM: LÓGICA DE EXIBIÇÃO DO CARTÃO FIDELIDADE
+        // ======================================================
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        document.body.classList.add('loaded');
-        loadAndDisplayOrder();
-    });
-  </script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('loaded');
+        loadAndDisplayOrder();
+    });
+  </script>
 </body>
 </html>
