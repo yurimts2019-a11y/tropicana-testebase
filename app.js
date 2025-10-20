@@ -31,24 +31,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // 1.1 DADOS DO CARDÁPIO (LISTAS ATUALIZADAS com descrição e imagem)
     const tamanhos = [
         { 
-            nome: '300ml (P)', 
+            nome: '300 ML', 
             preco: 16, 
             id: 'tam-p', 
-            description: '🍓Pequena na medida, gigante no sabor!', 
+            description: '<strong>Pequena na medida, gigante no sabor! 🍎</strong>', 
             imageURL: 'salada_300ml.jpg' // 🚨 Mude para o nome real da sua imagem
         },
         { 
-            nome: '400ml (M)', 
+            nome: '400 ML', 
             preco: 20, 
             id: 'tam-m', 
-            description: '🍍O equilíbrio perfeito entre frescor e sabor!', 
+            description: '<strong>O equilíbrio perfeito entre frescor e sabor! 🍓</strong>', 
             imageURL: 'salada_400ml.jpg' // 🚨 Mude para o nome real da sua imagem
         },
         { 
-            nome: '500ml (G)', 
+            nome: '500 ML', 
             preco: 24, 
             id: 'tam-g', 
-            description: '🍇 Gigante em sabor, perfeita pra dividir (ou não)!', 
+            description: '<strong>Gigante em sabor, perfeita pra dividir (ou não)! 🥝</strong>', 
             imageURL: 'salada_500ml.jpg' // 🚨 Mude para o nome real da sua imagem
         }
     ];
@@ -62,13 +62,13 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
 
     // Acompanhamentos (Grátis)
-    const acomp = ['Creme de Maracujá', 'Creme de Ninho', 'Granola', 'Mel', 'Aveia'];
+    const acomp = ['🥣 Creme de Maracujá', '🥣 Creme de Ninho', '🥜 Granola', '🍯 Mel', '🌾 Aveia'];
     
     // NOVO: 1.2 DADOS DO HORÁRIO DE FUNCIONAMENTO (Baseado no rodapé do index.html)
     const storeHours = [
         { day: 1, open: 13, close: 22 }, // Segunda (13:00h - 22:00h)
         { day: 2, open: 13, close: 22 }, // Terça
-        { day: 3, open: 09, close: 22 }, // Quarta
+        { day: 3, open: 13, close: 22 }, // Quarta
         { day: 4, open: 13, close: 22 }, // Quinta
         { day: 5, open: 13, close: 17 }, // Sexta (13:00h - 17:00h)
         { day: 6, open: 0, close: 0 },   // Sábado (Fechado)
@@ -579,30 +579,4 @@ document.addEventListener('DOMContentLoaded', function() {
     checkStoreStatus();
     setInterval(checkStoreStatus, 60000); // Checa a cada minuto
     loadFromLocalStorage(); // <--- CARREGA O PEDIDO SALVO AO INICIAR
-});
-
-// ====== Transição de página com animação do splash ======
-document.addEventListener('DOMContentLoaded', function() {
-  const confirmarBtn = document.querySelector('#confirmarPedido');
-
-  if (confirmarBtn) {
-    confirmarBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // Cria o splash dinamicamente (mesma estrutura da abertura)
-      const splash = document.createElement('div');
-      splash.id = 'splash-screen';
-      splash.innerHTML = `<img src="logo.png" alt="Delícias Tropicana">`;
-      document.body.appendChild(splash);
-
-      // Faz a animação igual à de abertura
-      splash.style.animation = 'fadeOutSplash 1s ease 1.8s forwards';
-      splash.querySelector('img').style.animation = 'logoBounce 1.5s ease-in-out infinite';
-
-      // Aguarda o tempo total da animação e redireciona
-      setTimeout(() => {
-        window.location.href = 'confirmacao.html';
-      }, 2800); // mesmo tempo da animação inicial
-    });
-  }
 });
