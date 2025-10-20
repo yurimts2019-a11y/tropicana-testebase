@@ -1,20 +1,21 @@
 <!doctype html>
 <html lang="pt-BR" class="page-transition">
 <head>
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Delícias Tropicana - Menu</title>
-  
-  <link rel="manifest" href="/manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=15"> 
-  
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Delícias Tropicana - Menu</title>
+
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=15"> 
+
 <style>
-  /* ===============================
-     ANIMAÇÃO DE ENTRADA (SPLASH)
-  =============================== */
-  #splash-screen {
+/* ===============================
+    ANIMAÇÃO DE ENTRADA (SPLASH)
+    MANTIDO AQUI POR CONVENIÊNCIA, MAS IDEAL NO style.css
+    =============================== */
+#splash-screen {
     position: fixed;
     top: 0;
     left: 0;
@@ -26,144 +27,181 @@
     align-items: center;
     z-index: 9999;
     animation: fadeOutSplash 1s ease 2.8s forwards;
-  }
+}
 
-  #splash-screen img {
+#splash-screen img {
     width: 170px;
     animation: logoBounce 2.5s ease-in-out infinite;
     filter: drop-shadow(0 0 10px rgba(0,0,0,0.15));
-  }
+}
 
-  @keyframes logoBounce {
+@keyframes logoBounce {
     0%, 100% { transform: scale(1) translateY(0); }
     30% { transform: scale(1.15) translateY(-10px); }
     50% { transform: scale(0.95) translateY(5px); }
     70% { transform: scale(1.05) translateY(-5px); }
-  }
+}
 
-  @keyframes fadeOutSplash {
+@keyframes fadeOutSplash {
     to { opacity: 0; visibility: hidden; }
-  }
+}
 
-  /* ===============================
-     TRANSIÇÃO DE CONTEÚDO
-  =============================== */
-  .fade-page {
-      opacity: 0;
-      transition: opacity 0.6s ease-in;
-  }
-  .fade-page.loaded {
-      opacity: 1;
-  }
+/* ===============================
+    TRANSIÇÃO DE CONTEÚDO (FADE-OUT AO SAIR)
+    =============================== */
+/* Esta regra garante que a página comece visível (1) e faça a transição */
+.page-transition.fade-out .fade-page {
+    opacity: 0;
+    transition: opacity 0.3s ease-out; /* Duração do fade-out do clique */
+}
+.page-transition.fade-out {
+    overflow: hidden; /* Evita quebras visuais durante o fade */
+}
 
-  .page-transition.fade-out .fade-page {
-      opacity: 0;
-      transition: opacity 0.3s ease-out;
-  }
-
-  .page-transition.fade-out {
-      overflow: hidden; 
-  }
+/* As regras fade-page e fade-page.loaded foram removidas daqui,
+    pois o preloader agora controla a entrada */
 </style>
 
-<div id="splash-screen">
-  <img src="logo.png" alt="Delícias Tropicana"> 
-</div>
-  
-  <header class="main-header">
-    <div class="banner-image">
-      <img src="image_2d4108.jpg" alt="Banner de Frutas Delícias Tropicana" loading="lazy">
+</head>
+<body>
+    
+    <div id="splash-screen">
+        <img src="logo.png" alt="Delícias Tropicana"> 
     </div>
-    <div class="logo-circle">
-      <img src="icon-192.png" alt="Logo Delícias Tropicana" loading="lazy">
-    </div>
-    <div class="store-info">
-      <p class="store-status">Fechado</p> 
-      <div class="delivery-details">
-        <span><strong>🕒 60-75min</strong></span>
-        <span><strong>🛵 Consulte a taxa de entrega!</strong></span>
-        <a href="https://www.instagram.com/deliciastropicana" class="more-details" target="_blank">
-          <strong>@deliciastropicana</strong>
-        </a>
-      </div>
-    </div>
-  </header>
-  
-  <div class="container">
-      
-      <div class="menu">
-          
-          <div class="modern-title-container">
-              <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
-              <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
-          </div>
-          <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;">
-          </div>
-          
-          <div class="section-card" id="seuPedidoCard"> 
-              <h3 class="section-title">Seu Pedido</h3>
-              
-              <div class="cards-container" id="cardsContainer">
-                  <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
-              </div>
-              
-              <div class="resumo-box" id="resumoBox">
-                  <p><strong>Resumo Detalhado:</strong></p>
-                  <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
-              </div>
+    <header class="main-header">
+        <div class="banner-image">
+            <img src="image_2d4108.jpg" alt="Banner de Frutas Delícias Tropicana" loading="lazy">
+        </div>
+        <div class="logo-circle">
+            <img src="icon-192.png" alt="Logo Delícias Tropicana" loading="lazy">
+        </div>
+        <div class="store-info">
+            <p class="store-status">Fechado</p> 
+            <div class="delivery-details">
+                <span><strong>🕒 60-75min</strong></span>
+                <span><strong>🛵 Consulte a taxa de entrega!</strong></span>
+                <a href="https://www.instagram.com/deliciastropicana" class="more-details" target="_blank">
+                    <strong>@deliciastropicana</strong>
+                </a>
+            </div>
+        </div>
+    </header>
 
-          </div>
-      </div>
-      
-    <div id="customizationModal" class="modal-overlay">
-      <div class="modal-content">
-          <button class="close-modal" id="closeModal">X</button>
-          
-          <h3 id="modalTitle">Personalizar Salada</h3>
-          
-          <div class="custom-options">
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Escolha as Frutas (Máx. 05):</h4> 
-                  <div class="opcoes opcoes-frutas" id="frutasOpcoes"></div>
-              </div>
+    <div class="container fade-page"> 
 
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Adicionais de Frutas (Máx. 01 - R$2,00 cada):</h4>
-                  <div class="opcoes opcoes-extras" id="extrasOpcoes"></div>
-              </div>
+        <div class="menu">
+                       
+            <div class="modern-title-container">
+                <h2 class="modern-title-text">Monte Sua Salada de Frutas!</h2>
+                <p class="modern-subtitle">Escolha seu tamanho e personalize!</p>
+            </div>
+            <div id="sizeSelectionContainer" class="size-selection-container" style="margin-bottom: 25px;">
+            </div>
+                       
+            <div class="section-card" id="seuPedidoCard"> 
+                <h3 class="section-title">Seu Pedido</h3>
+                             
+                <div class="cards-container" id="cardsContainer">
+                    <p class="empty-state">Seu carrinho está vazio. Comece a montar sua salada!</p>
+                </div>
+                             
+                <div class="resumo-box" id="resumoBox">
+                    <p><strong>Resumo Detalhado:</strong></p>
+                    <div id="resumoContent" class="resumo-content">Nenhuma Salada adicionada.</div>
+                    
+                    <div class="resumo-actions">
+                        <span class="resumo-total-final">Total: R$0,00</span>
+                        <button id="confirmarPedidoResumo" disabled>Confirmar Pedido</button>
+                    </div>
 
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">➡️ Acompanhamentos (Grátis):</h4>
-                  <div class="opcoes opcoes-acomp" id="acompOpcoes"></div>
-              </div>
-            
-              <div class="grupo-opcoes">
-                  <h4 class="categoria-title">📝 Observações:</h4>
-                  <textarea id="obsInput" class="text-input" rows="3" placeholder="Ex: granola separada, pouco mel..."></textarea>
-              </div>
-          </div>
+                </div>
 
-          <button id="addToOrder" class="btn adicionar">Adicionar ao Pedido - <span id="modalTotal">R$0,00</span></button>
-      </div>
-    </div>
-  </div>
+            </div>
+        </div>
+    </div> <div id="customizationModal" class="modal-overlay">
+      <div class="modal-content">
+          <button class="close-modal" id="closeModal">X</button>
+          
+          <h3 id="modalTitle">Personalizar Salada</h3>
+          
+          <div class="custom-options">
+              <div class="grupo-opcoes">
+                  <h4 class="categoria-title">➡️ Escolha as Frutas (Máx. 05):</h4> 
+                  <div class="opcoes opcoes-frutas" id="frutasOpcoes"></div>
+              </div>
 
-<!-- Rodapé institucional -->
+              <div class="grupo-opcoes">
+                  <h4 class="categoria-title">➡️ Adicionais de Frutas (Máx. 01 - R$2,00 cada):</h4>
+                  <div class="opcoes opcoes-extras" id="extrasOpcoes"></div>
+              </div>
+
+              <div class="grupo-opcoes">
+                  <h4 class="categoria-title">➡️ Acompanhamentos (Grátis):</h4>
+                  <div class="opcoes opcoes-acomp" id="acompOpcoes"></div>
+              </div>
+            
+              <div class="grupo-opcoes">
+                  <h4 class="categoria-title">📝 Observações:</h4>
+                  <textarea id="obsInput" class="text-input" rows="3" placeholder="Ex: granola separada, pouco mel..."></textarea>
+              </div>
+          </div>
+
+          <button id="addToOrder" class="btn adicionar">Adicionar ao Pedido - <span id="modalTotal">R$0,00</span></button>
+      </div>
+    </div>
+    
+
 <footer class="site-footer">
-  <p>🍍 <strong>Delícias Tropicana</strong></p>
-  <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta 13:00h–17:00h</p>
-  <p>📞 WhatsApp: <a href="https://wa.me/5565993321761" target="_blank">Clique e mande uma mensagem!</a></p>
-  <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
+  <p>🍍 <strong>Delícias Tropicana</strong></p>
+  <p>📍 Várzea Grande-MT | ⏰ Segunda a Quinta 13:00h–22:00h | Sexta 13:00h–17:00h</p>
+  <p>📞 WhatsApp: <a href="https://wa.me/5565993321761" target="_blank">Clique e mande uma mensagem!</a></p>
+  <p class="footer-credit">Feito com 💛 por Delícias Tropicana</p>
 </footer>
 
 <div id="closed-overlay">
-  <h2>⏰ Loja Fechada</h2>
-  <p>Horário de Funcionamento:</p>
-  <p>Segunda a Quinta: das 13h00 às 22h00</p>
-  <p>Sexta-feira: das 13h00 às 17h00</p>
-  <button class="btn" onclick="window.open('https://wa.me/5565993321761','_blank')">Fale conosco</button>
+  <h2>⏰ Loja Fechada</h2>
+  <p>Horário de Funcionamento:</p>
+  <p>Segunda a Quinta: das 13h00 às 22h00</p>
+  <p>Sexta-feira: das 13h00 às 17h00</p>
+  <button class="btn" onclick="window.open('https://wa.me/5565993321761','_blank')">Fale conosco</button>
 </div>
 
-  <script src="app.js?v=14"></script>
+<script>
+    // ----------------------------------------------------
+    // INÍCIO: LÓGICA DE FADE-OUT AO CLICAR EM CONFIRMAR
+    // ----------------------------------------------------
+    function fadeOutAndRedirect(url) {
+        // Adiciona a classe 'fade-out' ao <html> para iniciar a transição
+        document.documentElement.classList.add('fade-out');
+
+        // Espera o tempo da transição CSS (0.3s) antes de redirecionar
+        setTimeout(function() {
+            window.location.href = url;
+        }, 300); // 300ms = 0.3 segundos (valor de 'transition' no CSS)
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnConfirmar = document.getElementById('confirmarPedidoResumo');
+
+        if (btnConfirmar) {
+            btnConfirmar.addEventListener('click', function(event) {
+                // A sua lógica de confirmação/geração do pedido deve vir aqui
+                
+                // Se o botão não estiver disabled e o pedido estiver pronto:
+                if (!this.disabled) {
+                    event.preventDefault(); 
+                    
+                    // Chama a função de transição para a próxima página
+                    fadeOutAndRedirect('confirmacao.html');
+                }
+            });
+        }
+    });
+    // ----------------------------------------------------
+    // FIM: LÓGICA DE FADE-OUT AO CLICAR EM CONFIRMAR
+    // ----------------------------------------------------
+</script>
+
+  <script src="app.js?v=14"></script>
 </body>
 </html>
