@@ -35,21 +35,21 @@ document.addEventListener('DOMContentLoaded', function() {
             preco: 16, 
             id: 'tam-p', 
             description: '<strong>Pequena na medida, gigante no sabor! 🍎</strong>', 
-            imageURL: 'salada_300ml.jpg' // 🚨 Mude para o nome real da sua imagem
+            imageURL: 'salada_300ml.jpg' 
         },
         { 
             nome: '400 ML', 
             preco: 20, 
             id: 'tam-m', 
             description: '<strong>O equilíbrio perfeito entre frescor e sabor! 🍓</strong>', 
-            imageURL: 'salada_400ml.jpg' // 🚨 Mude para o nome real da sua imagem
+            imageURL: 'salada_400ml.jpg' 
         },
         { 
             nome: '500 ML', 
             preco: 24, 
             id: 'tam-g', 
             description: '<strong>Gigante em sabor, perfeita pra dividir (ou não)! 🥝</strong>', 
-            imageURL: 'salada_500ml.jpg' // 🚨 Mude para o nome real da sua imagem
+            imageURL: 'salada_500ml.jpg' 
         }
     ];
 
@@ -106,8 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const now = new Date();
         
         // Simulação de fuso horário de Cuiabá. Se o servidor for GMT, isso é necessário.
-        // Se o servidor já estiver em Cuiabá/Brasília, pode usar 'now' diretamente.
-        // Vou usar a lógica de fuso horário para garantir a precisão.
         const dataCuiaba = new Date(
             now.toLocaleString('en-US', { timeZone: 'America/Cuiaba' })
         );
@@ -520,7 +518,8 @@ document.addEventListener('DOMContentLoaded', function() {
             btnConfirmar = document.createElement('button');
             btnConfirmar.id = 'confirmarPedidoResumo';
             btnConfirmar.className = 'btn confirmar';
-            btnConfirmar.addEventListener('click', enviarPedido); // <--- CHAMA FUNÇÃO DE REDIRECIONAMENTO
+            // ✅ CORREÇÃO APLICADA: Chama a função enviarPedido()
+            btnConfirmar.addEventListener('click', enviarPedido); 
             container.appendChild(btnConfirmar);
         }
         
@@ -548,13 +547,14 @@ document.addEventListener('DOMContentLoaded', function() {
     function enviarPedido() {
         
         if (pedidos.length === 0) {
-             alert('Adicione pelo menos um item ao pedido.');
-             return;
+              alert('Adicione pelo menos um item ao pedido.');
+              return;
         }
         
-        // Removida a checagem de Nome e Bairro. Agora, apenas salva o pedido e redireciona.
+        // Salva o pedido no storage para a próxima página consumir
         saveToLocalStorage(); 
-        // window.location.href = 'confirmacao.html'; // MUDANÇA: Usa a transição
+        
+        // Redireciona para a tela de confirmação (sem adicionar selo aqui!)
         handlePageTransition('confirmacao.html');
     }
 
@@ -582,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // =======================================================
-// LÓGICA DO CARTÃO FIDELIDADE VIRTUAL
+// LÓGICA DO CARTÃO FIDELIDADE VIRTUAL (GLOBAL)
 // =======================================================
 
 const MAX_SEALS = 10; // Número de selos necessários para o resgate (Ex: A cada 10 pedidos, 1 é grátis)
@@ -624,31 +624,5 @@ function resetFidelidadeSelos() {
     console.log('[FIDELIDADE] Selos zerados após resgate.');
 }
 
-// =======================================================
-// INTEGRAÇÃO COM O BOTÃO CONFIRMAR PEDIDO (CRITICAL)
-// =======================================================
-
-// Você precisa chamar 'addFidelidadeSelo()' ANTES de redirecionar para o WhatsApp
-// ou para a página de confirmação.
-
-// ASSUMINDO O TRECHO DO SEU CÓDIGO QUE GERA O PEDIDO E REDIRECIONA:
-document.addEventListener('DOMContentLoaded', function() {
-    const btnConfirmar = document.getElementById('confirmarPedidoResumo');
-
-    if (btnConfirmar) {
-        btnConfirmar.addEventListener('click', function(event) {
-            // ... Toda a sua lógica de GERAÇÃO DO PEDIDO (cálculos, montagem da mensagem) ...
-
-            // SE O PEDIDO FOI GERADO COM SUCESSO E ESTÁ PRESTES A SER ENVIADO:
-
-            // 1. Adiciona o selo de fidelidade ANTES DE REDIRECIONAR
-            addFidelidadeSelo(); 
-            
-            // 2. Chama a função de transição para a próxima página
-            // event.preventDefault(); // Já deve estar aqui, se você usa o fade-out
-            // fadeOutAndRedirect('confirmacao.html'); // OU window.location.href = urlWhatsApp
-            
-            // ... (Seu código de redirecionamento) ...
-        });
-    }
-});
+// ✅ INTEGRAÇÃO COM O BOTÃO CONFIRMAR PEDIDO (CRITICAL): REMOVIDA DAQUI.
+// A função addFidelidadeSelo() DEVE SER CHAMADA SOMENTE EM confirmacao.html.
