@@ -1055,3 +1055,35 @@ body.store-closed #closed-overlay {
         box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); /* Volta à sombra inicial */
     }
 }
+
+/* Estilos para a seção de Fidelidade */
+.fidelidade-card {
+    background: #FFEB3B; /* Amarelo da logo */
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 25px;
+    border: 2px solid #FFD740;
+}
+.selos-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 10px 0 20px;
+}
+.selo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #eee;
+    border: 2px solid #ccc;
+    line-height: 26px;
+    font-weight: 700;
+    color: #ccc;
+    font-size: 0.8em;
+}
+.selo.earned {
+    background-color: var(--color-success); /* Verde (ou cor de destaque do seu tema) */
+    border-color: #388e3c;
+    color: white;
+}
