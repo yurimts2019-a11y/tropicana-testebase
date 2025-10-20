@@ -580,3 +580,75 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(checkStoreStatus, 60000); // Checa a cada minuto
     loadFromLocalStorage(); // <--- CARREGA O PEDIDO SALVO AO INICIAR
 });
+
+// =======================================================
+// LÓGICA DO CARTÃO FIDELIDADE VIRTUAL
+// =======================================================
+
+const MAX_SEALS = 10; // Número de selos necessários para o resgate (Ex: A cada 10 pedidos, 1 é grátis)
+
+/**
+ * Recupera o número atual de selos do LocalStorage.
+ * @returns {number} Número de selos.
+ */
+function getFidelidadeSelos() {
+    // Retorna o valor armazenado, convertendo para número. Se não existir, retorna 0.
+    const selos = localStorage.getItem('fidelidade_selos');
+    return parseInt(selos) || 0;
+}
+
+/**
+ * Adiciona um selo ao LocalStorage e exibe uma mensagem.
+ */
+function addFidelidadeSelo() {
+    let selos = getFidelidadeSelos();
+
+    // 1. Aumenta a contagem de selos
+    if (selos < MAX_SEALS) {
+        selos++;
+        localStorage.setItem('fidelidade_selos', selos);
+        console.log(`[FIDELIDADE] Selo adicionado! Total: ${selos}/${MAX_SEALS}`);
+
+        // Opcional: Mostrar uma notificação temporária na tela (toast)
+        // showToast(`Parabéns! Você ganhou um selo. Total: ${selos}/${MAX_SEALS}`);
+    }
+    
+    // Deixe a lógica de Parabéns/Resgate para a página confirmacao.html
+}
+
+/**
+ * Zera a contagem de selos após o resgate.
+ */
+function resetFidelidadeSelos() {
+    localStorage.setItem('fidelidade_selos', 0);
+    console.log('[FIDELIDADE] Selos zerados após resgate.');
+}
+
+// =======================================================
+// INTEGRAÇÃO COM O BOTÃO CONFIRMAR PEDIDO (CRITICAL)
+// =======================================================
+
+// Você precisa chamar 'addFidelidadeSelo()' ANTES de redirecionar para o WhatsApp
+// ou para a página de confirmação.
+
+// ASSUMINDO O TRECHO DO SEU CÓDIGO QUE GERA O PEDIDO E REDIRECIONA:
+document.addEventListener('DOMContentLoaded', function() {
+    const btnConfirmar = document.getElementById('confirmarPedidoResumo');
+
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener('click', function(event) {
+            // ... Toda a sua lógica de GERAÇÃO DO PEDIDO (cálculos, montagem da mensagem) ...
+
+            // SE O PEDIDO FOI GERADO COM SUCESSO E ESTÁ PRESTES A SER ENVIADO:
+
+            // 1. Adiciona o selo de fidelidade ANTES DE REDIRECIONAR
+            addFidelidadeSelo(); 
+            
+            // 2. Chama a função de transição para a próxima página
+            // event.preventDefault(); // Já deve estar aqui, se você usa o fade-out
+            // fadeOutAndRedirect('confirmacao.html'); // OU window.location.href = urlWhatsApp
+            
+            // ... (Seu código de redirecionamento) ...
+        });
+    }
+});
