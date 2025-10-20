@@ -1,426 +1,509 @@
 <!doctype html>
 <html lang="pt-BR" class="page-transition">
 <head>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Confirmação de Pedido - Delícias Tropicana</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=14"> 
-    
-    <style>
-        /* 1. Transição de Entrada da Página */
-        .fade-page {
-            opacity: 0;
-            transition: opacity 0.3s ease-in;
-        }
-        .fade-page.loaded {
-            opacity: 1;
-        }
-        
-        /* 2. Transição de Saída (Ao clicar para mudar de página) */
-        .page-transition.fade-out .fade-page {
-            opacity: 0;
-            transition: opacity 0.3s ease-out;
-        }
-        /* 3. Evita que o scroll apareça durante a transição */
-        .page-transition.fade-out {
-            overflow: hidden; 
-        }
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Confirmação de Pedido - Delícias Tropicana</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=14"> 
+    
+    <style>
+        /* 1. Transição de Entrada da Página */
+        .fade-page {
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+        }
+        .fade-page.loaded {
+            opacity: 1;
+        }
+        
+        /* 2. Transição de Saída (Ao clicar para mudar de página) */
+        .page-transition.fade-out .fade-page {
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+        /* 3. Evita que o scroll apareça durante a transição */
+        .page-transition.fade-out {
+            overflow: hidden; 
+        }
 
-        /* ✅ ESTILOS DO RESUMO DO PEDIDO */
-        .resumo-content {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 15px 0;
-        }
-        .resumo-item {
-            font-size: 0.95rem;
-            line-height: 1.4;
-            padding-bottom: 10px;
-            border-bottom: 1px dotted #ccc;
-        }
-        .resumo-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-        .separator {
-            color: #999;
-            margin: 0 5px;
-        }
-        .detail-label {
-            font-weight: 600;
-        }
-        .item-price {
-            color: var(--color-alert, #e53935); 
-            font-size: 1rem;
-        }
+        /* ✅ ESTILOS DO RESUMO DO PEDIDO */
+        .resumo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px 0;
+        }
+        .resumo-item {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            padding-bottom: 10px;
+            border-bottom: 1px dotted #ccc;
+        }
+        .resumo-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .separator {
+            color: #999;
+            margin: 0 5px;
+        }
+        .detail-label {
+            font-weight: 600;
+        }
+        .item-price {
+            color: var(--color-alert, #e53935); 
+            font-size: 1rem;
+        }
 
-        /* =======================================
-         * NOVO: ESTILOS DO CARTÃO FIDELIDADE
-         * ======================================= */
-        .fidelidade-card {
-            background: #FFEB3B; /* Amarelo da logo (cor de destaque) */
-            padding: 20px;
-            border-radius: 12px;
-            margin: 25px 0; /* Espaço antes e depois do cartão */
-            border: 2px solid #FFD740;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .fidelidade-card h3 {
-            margin-top: 0;
-            color: #222;
-            font-size: 1.3rem;
-        }
-        .selos-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0 20px;
-        }
-        .selo {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background-color: #eee;
-            border: 2px solid #ccc;
-            line-height: 31px;
-            font-weight: 700;
-            color: #ccc;
-            font-size: 0.9em;
-            transition: all 0.2s ease;
-        }
-        .selo.earned {
-            /* Assumindo que 'style.css' tem uma variável ou que você define um verde de sucesso */
-            background-color: #4CAF50; /* Verde de sucesso */
-            border-color: #388e3c;
-            color: white;
-        }
-        #btnResgate.btn-whatsapp {
-            background-color: #4CAF50;
-            color: white;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        #btnResgate:disabled {
-            background-color: #ccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-    </style>
-    
+        /* =======================================
+         * NOVO: ESTILOS DO CARTÃO FIDELIDADE
+         * ======================================= */
+        .fidelidade-card {
+            background: #FFEB3B; /* Amarelo da logo (cor de destaque) */
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0; /* Espaço antes e depois do cartão */
+            border: 2px solid #FFD740;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .fidelidade-card h3 {
+            margin-top: 0;
+            color: #222;
+            font-size: 1.3rem;
+        }
+        .selos-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0 20px;
+        }
+        .selo {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background-color: #eee;
+            border: 2px solid #ccc;
+            line-height: 31px;
+            font-weight: 700;
+            color: #ccc;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
+        }
+        .selo.earned {
+            /* Assumindo que 'style.css' tem uma variável ou que você define um verde de sucesso */
+            background-color: #4CAF50; /* Verde de sucesso */
+            border-color: #388e3c;
+            color: white;
+        }
+        #btnResgate.btn-whatsapp {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        #btnResgate:disabled {
+            background-color: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+    </style>
+    
 </head>
 <body class="fade-page">
-    <main class="container">
-        <section class="menu">
-            <h2>✅ Quase lá! Confira seu Pedido:</h2>
+    <main class="container">
+        <section class="menu">
+            <h2>✅ Quase lá! Confira seu Pedido:</h2>
 
-            <div class="resumo-box section-card" id="resumoFinalContainer">
-                
-                <h3 class="section-title">Seu Nome</h3>
-                <div class="campo">
-                    <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
-                </div>
-                <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
-                
-                <h3 class="section-title">Resumo do Pedido</h3>
-                <div id="resumoPedido" class="resumo-content"></div>
+            <div class="resumo-box section-card" id="resumoFinalContainer">
+                
+                <h3 class="section-title">Seu Nome</h3>
+                <div class="campo">
+                    <input type="text" id="nameInputFinal" placeholder="Ex.: Claudiane" required>
+                </div>
+                <hr style="margin: 20px 0; border: 0; border-top: 1px dashed #eee;">
+                
+                <h3 class="section-title">Resumo do Pedido</h3>
+                <div id="resumoPedido" class="resumo-content"></div>
 
-                <div id="fidelidadeCard" class="fidelidade-card">
-                    <h3>Cartão Fidelidade 🍍</h3>
-                    <p id="selosStatus">Você tem <strong>0</strong> selos de 10.</p>
-                    <div id="selosContainer" class="selos-container">
-                        </div>
-                    <button id="btnResgate" class="btn" disabled>
-                        Complete 10 selos para ganhar uma Salada GRÁTIS!
-                    </button>
-                </div>
-                <div class="confirmation-actions"> 
-                    <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
+                <div id="fidelidadeCard" class="fidelidade-card">
+                    <h3>Cartão Fidelidade 🍍</h3>
+                    <p id="selosStatus">Você tem <strong>0</strong> selos de 10.</p>
+                    <div id="selosContainer" class="selos-container">
+                        </div>
+                    <button id="btnResgate" class="btn" disabled>
+                        Complete 10 selos para ganhar uma Salada GRÁTIS!
+                    </button>
+                </div>
+                <div class="confirmation-actions"> 
+                    <div class="resumo-total-final resumo-total centralizado" id="totalAPagar"></div>
 
-                    <button id="enviarPedido" class="btn btn-whatsapp">
-                        Enviar Pedido via WhatsApp
-                    </button>
-                    <button id="voltarMenu" class="btn btn-voltar">
-                        Voltar e Adicionar Mais Saladas
-                    </button>
-                </div>
+                    <button id="enviarPedido" class="btn btn-whatsapp">
+                        Enviar Pedido via WhatsApp
+                    </button>
+                    <button id="voltarMenu" class="btn btn-voltar">
+                        Voltar e Adicionar Mais Saladas
+                    </button>
+                </div>
 
-            </div>
-        </section>
-    </main>
+            </div>
+        </section>
+    </main>
 
-    <script>
-        // Assume-se que 'handlePageTransition' está definido globalmente em 'app.js' ou em 'index.html'
-        // Definido como fallback
-        if(typeof handlePageTransition !== 'function') {
-            window.handlePageTransition = function(url) {
-                document.documentElement.classList.add('fade-out');
-                setTimeout(() => { window.location.href = url; }, 300);
-            };
-        }
+    <script>
+        // Assume-se que 'handlePageTransition' está definido globalmente em 'app.js' ou em 'index.html'
+        // Definido como fallback
+        if(typeof handlePageTransition !== 'function') {
+            window.handlePageTransition = function(url) {
+                document.documentElement.classList.add('fade-out');
+                setTimeout(() => { window.location.href = url; }, 300);
+            };
+        }
 
-        // Variável global para o telefone
-        const phone = '5565993321761'; 
+        // Variável global para o telefone
+        const phone = '5565993321761'; 
 
-        const formatCurrency = (value) => {
-            return new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-            }).format(value);
-        };
+        const formatCurrency = (value) => {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        };
 
-        function calcularTotalGeral() {
-            const pedidosJSON = localStorage.getItem('tropicanaPedidos');
-            const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
-            let totalPedido = 0;
-            pedidos.forEach(item => {
-                totalPedido += item.total;
-            });
-            return totalPedido;
-        }
+        function calcularTotalGeral() {
+            const pedidosJSON = localStorage.getItem('tropicanaPedidos');
+            const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
+            let totalPedido = 0;
+            pedidos.forEach(item => {
+                totalPedido += item.total;
+            });
+            return totalPedido;
+        }
 
-        // ======================================================
-        // FUNÇÕES DE FIDELIDADE (REPLICADAS AQUI POR SEGURANÇA)
-        // ======================================================
-        const MAX_SEALS = 10;
+        // ======================================================
+        // FUNÇÕES DE FIDELIDADE (SEGURANÇA ATUALIZADA - CHECKSUM)
+        // ======================================================
+        const MAX_SEALS = 10;
+        const SECRET_KEY = 42; // Escolha um número aleatório (secreto) e mantenha-o constante!
 
-        function getFidelidadeSelos() {
-            const selos = localStorage.getItem('fidelidade_selos');
-            return parseInt(selos) || 0;
-        }
-        
-        function addFidelidadeSelo() {
-            let selos = getFidelidadeSelos();
-            if (selos < MAX_SEALS) {
-                selos++;
-                localStorage.setItem('fidelidade_selos', selos);
-                console.log(`[FIDELIDADE] Selo adicionado! Total: ${selos}/${MAX_SEALS}`);
-            }
-        }
+        /**
+         * Calcula um valor de verificação de integridade (Checksum) a partir do número de selos.
+         */
+        function createChecksum(selos) {
+            // Fórmula: (Selos * Chave Secreta) + (Selos * 3)
+            return (selos * SECRET_KEY) + (selos * 3);
+        }
 
-        function resetFidelidadeSelos() {
-            localStorage.setItem('fidelidade_selos', 0);
-            console.log('[FIDELIDADE] Selos zerados após resgate.');
-        }
+        /**
+         * Recupera o número atual de selos do LocalStorage, validando a integridade.
+         */
+        function getFidelidadeSelos() {
+            // Novo nome da chave no localStorage é 'fidelidade_data'
+            const dataJSON = localStorage.getItem('fidelidade_data');
+            
+            if (!dataJSON) {
+                return 0;
+            }
+            
+            try {
+                const data = JSON.parse(dataJSON);
+                const selos = parseInt(data.selos);
+                const storedChecksum = parseInt(data.checksum);
+                
+                // 1. Recalcula e compara o checksum
+                const calculatedChecksum = createChecksum(selos);
+                
+                if (calculatedChecksum === storedChecksum) {
+                    return selos;
+                } else {
+                    // DETECÇÃO DE MANIPULAÇÃO!
+                    console.error("[SEGURANÇA] Tentativa de manipulação do Cartão Fidelidade detectada! Zerando selos.");
+                    resetFidelidadeSelos(); 
+                    return 0; 
+                }
+            } catch (e) {
+                // Trata dados corrompidos ou ilegíveis
+                console.error("[SEGURANÇA] Dados de fidelidade corrompidos ou ilegíveis.");
+                return 0;
+            }
+        }
 
+        /**
+         * Adiciona um selo ao LocalStorage e armazena o novo checksum.
+         */
+        function addFidelidadeSelo() {
+            let selos = getFidelidadeSelos(); // A validação é feita aqui
+            
+            if (selos < MAX_SEALS) {
+                selos++;
+                
+                // Cria o novo objeto seguro com o checksum
+                const newData = {
+                    selos: selos,
+                    checksum: createChecksum(selos)
+                };
+                
+                localStorage.setItem('fidelidade_data', JSON.stringify(newData));
+                console.log(`[FIDELIDADE] Selo adicionado! Total: ${selos}/${MAX_SEALS}`);
+            }
+        }
 
-        // ======================================================
-        // FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP
-        // ======================================================
-        const getWhatsappText = (total) => {
-            const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
-            const name = localStorage.getItem('tropicanaName') || 'Cliente';
-
-            let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`;
-            text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`;
-            
-            pedidos.forEach((item, index) => {
-                const precoUnitario = item.tamanho.preco;
-
-                text += `ITEM ${index + 1}\n`; 
-                text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
-                
-                if (item.fruits && item.fruits.length > 0) {
-                    text += `\n*Frutas (Grátis):*\n`; 
-                    item.fruits.forEach(fruta => {
-                        text += `• ${fruta.nome}\n`;
-                    });
-                }
-
-                if (item.extras && item.extras.length > 0) {
-                    text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
-                    item.extras.forEach(extra => {
-                        text += `• ${extra.nome}\n`;
-                    });
-                }
-
-                if (item.acomp && item.acomp.length > 0) {
-                    text += `\n*Acompanhamentos (Grátis):*\n`; 
-                    item.acomp.forEach(acomp => {
-                        text += `* ${acomp.nome}\n`;
-                    });
-                }
-                
-                const obs = item.observacoes || item.obs;
-                if (obs && obs.trim() !== '') {
-                    const obsLimpa = obs.trim().replace(/\n/g, ' '); 
-                    text += `\n*Observações*: ${obsLimpa}\n`;
-                }
-                
-                text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
-                text += `---------------------------------\n`; 
-            });
-
-            text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
-            text += `*Obrigado!*`; 
-            text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
-
-            return text;
-        };
-
-        // ======================================================
-        // FUNÇÃO loadAndDisplayOrder
-        // ======================================================
-        function loadAndDisplayOrder() {
-            
-            // 1. RECUPERAÇÃO DE DADOS
-            const pedidosJSON = localStorage.getItem('tropicanaPedidos');
-            const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
-
-            // 2. REFERÊNCIAS DO DOM
-            const resumoPedidoDiv = document.getElementById('resumoPedido');
-            const totalAPagarDiv = document.getElementById('totalAPagar');
-            const nameInput = document.getElementById('nameInputFinal');
-            
-            // 3. RECUPERAÇÃO DE DADOS (Nome)
-            nameInput.value = localStorage.getItem('tropicanaName') || '';
-            
-            // 4. CÁLCULO E EXIBIÇÃO
-            let resumoTexto = '';
-            let totalPedido = 0;
-
-            if (pedidos.length === 0) {
-                resumoPedidoDiv.textContent = 'Nenhum pedido encontrado. Voltando ao menu...';
-                totalAPagarDiv.textContent = 'TOTAL: R$0,00';
-                handlePageTransition('index.html');
-                return;
-            }
-
-            // GERAÇÃO DE HTML
-            resumoTexto += pedidos.map((item, index) => {
-                const totalItem = item.total; 
-                
-                let linha = `<div class="resumo-item">`;
-                
-                linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
-                
-                let detalhes = [];
-
-                if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
-                if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
-                if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
-                
-                const obs = item.observacoes || item.obs;
-                if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
-                
-                linha += detalhes.join(' <span class="separator">|</span> ');
-                
-                linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
-                
-                linha += `</div>`; 
-
-                totalPedido += totalItem;
-                return linha;
-            }).join('');
-
-            resumoPedidoDiv.innerHTML = resumoTexto;
-            totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
-
-            // 5. LISTENERS
-            document.getElementById('enviarPedido').addEventListener('click', () => {
-                // 5.1 Validar campos
-                if (nameInput.value.trim() === '') {
-                    alert('Por favor, preencha seu nome.');
-                    return;
-                }
-                // 5.2 Salvar Nome
-                localStorage.setItem('tropicanaName', nameInput.value.trim());
-
-                const totalPedido = calcularTotalGeral();
-                // 5.3 Gera o texto para o WhatsApp com a nova formatação
-                let whatsappText = getWhatsappText(totalPedido);
-
-                // ✅ AÇÃO CRÍTICA: Adiciona o selo de fidelidade ANTES de limpar o storage
-                addFidelidadeSelo(); 
-                
-                // 5.4 REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
-                whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
+        /**
+         * Zera a contagem de selos após o resgate.
+         */
+        function resetFidelidadeSelos() {
+            // Zera os selos e armazena o checksum correto para 0
+            const newData = {
+                selos: 0,
+                checksum: createChecksum(0)
+            };
+            localStorage.setItem('fidelidade_data', JSON.stringify(newData));
+            console.log('[FIDELIDADE] Selos zerados após resgate.');
+        }
 
 
-                // 5.5 Salva a mensagem no storage e redireciona para a tela de sucesso
-                localStorage.setItem('pedidoWhatsApp', whatsappText);
+        // ======================================================
+        // FUNÇÃO PARA GERAR O TEXTO DO WHATSAPP (ATUALIZADA COM STATUS FIDELIDADE)
+        // ======================================================
+        const getWhatsappText = (total) => {
+            const pedidos = JSON.parse(localStorage.getItem('tropicanaPedidos')) || [];
+            const name = localStorage.getItem('tropicanaName') || 'Cliente';
 
-                // 5.6 Limpa o localStorage de pedido
-                localStorage.removeItem('tropicanaPedidos');
-                localStorage.removeItem('tropicanaName');
-                
-                // 5.7 Redireciona para a tela de sucesso
-                handlePageTransition('sucesso.html'); 
-            });
+            // NOVO: Obtém o status do Cartão Fidelidade de forma segura
+            const selosAtuais = getFidelidadeSelos();
+            const selosRestantes = MAX_SEALS - selosAtuais;
+            
+            // Geração do Título e Status de Fidelidade
+            let text = `*NOVO PEDIDO - DELÍCIAS TROPICANA*\n\n`;
+            text += `Meu nome é *${name.trim()}* e este é o meu pedido:\n\n`;
+            
+            // ✅ NOVO BLOCO DE MENSAGEM FIDELIDADE PARA CONTROLE INTERNO
+            if (selosAtuais === MAX_SEALS) {
+                // Se estiver pronto para resgate (status de selos cheios)
+                text += `*🎉 CARTÃO FIDELIDADE COMPLETO!*\n`;
+                text += `*>> O CLIENTE ESTÁ APTO A RESGATAR A SALADA GRÁTIS.* \n`;
+                text += `(Se o resgate não for feito via botão na tela, será feito manualmente aqui.)\n`;
+                text += `---------------------------------\n`;
+            } else if (selosAtuais > 0) {
+                // Se já tiver selos, mas não completou
+                text += `*⭐ CARTÃO FIDELIDADE: ${selosAtuais}/${MAX_SEALS} selos*\n`;
+                text += `(Faltam ${selosRestantes} selos para o prêmio grátis!)\n`;
+                text += `---------------------------------\n`;
+            }
+            // FIM NOVO BLOCO
 
-            // Listener para o botão de Voltar
-            document.getElementById('voltarMenu').addEventListener('click', () => {
-                localStorage.setItem('tropicanaName', nameInput.value.trim());
-                handlePageTransition('index.html');
-            });
-            
-            // Listener para persistir nome no localStorage
-            nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
+            pedidos.forEach((item, index) => {
+                const precoUnitario = item.tamanho.preco;
 
-            // ======================================================
-            // LÓGICA DE EXIBIÇÃO DO CARTÃO FIDELIDADE
-            // ======================================================
-            const selosAtuais = getFidelidadeSelos();
-            const container = document.getElementById('selosContainer');
-            const statusText = document.getElementById('selosStatus');
-            const btnResgate = document.getElementById('btnResgate');
+                text += `ITEM ${index + 1}\n`; 
+                text += `Tamanho: ${item.tamanho.nome} — ${formatCurrency(precoUnitario)}\n`;
+                
+                if (item.fruits && item.fruits.length > 0) {
+                    text += `\n*Frutas (Grátis):*\n`; 
+                    item.fruits.forEach(fruta => {
+                        text += `• ${fruta.nome}\n`;
+                    });
+                }
 
-            if (container) { 
-                // 1. Atualiza o status
-                statusText.innerHTML = `Você tem <strong>${selosAtuais}</strong> selos de ${MAX_SEALS}.`;
+                if (item.extras && item.extras.length > 0) {
+                    text += `\n*Adicionais de Fruta (R$2,00 cada):*\n`; 
+                    item.extras.forEach(extra => {
+                        text += `• ${extra.nome}\n`;
+                    });
+                }
 
-                // 2. Desenha os selos
-                for (let i = 1; i <= MAX_SEALS; i++) {
-                    const seloDiv = document.createElement('div');
-                    seloDiv.className = 'selo';
-                    if (i <= selosAtuais) {
-                        seloDiv.classList.add('earned');
-                        seloDiv.textContent = '✓';
-                    } else {
-                        seloDiv.textContent = i;
-                    }
-                    container.appendChild(seloDiv);
-                }
+                if (item.acomp && item.acomp.length > 0) {
+                    text += `\n*Acompanhamentos (Grátis):*\n`; 
+                    item.acomp.forEach(acomp => {
+                        text += `* ${acomp.nome}\n`;
+                    });
+                }
+                
+                const obs = item.observacoes || item.obs;
+                if (obs && obs.trim() !== '') {
+                    const obsLimpa = obs.trim().replace(/\n/g, ' '); 
+                    text += `\n*Observações*: ${obsLimpa}\n`;
+                }
+                
+                text += `\n*Subtotal: ${formatCurrency(item.total)}*\n`; 
+                text += `---------------------------------\n`; 
+            });
 
-                // 3. Lógica do botão de resgate
-                if (selosAtuais >= MAX_SEALS) {
-                    btnResgate.disabled = false;
-                    btnResgate.classList.add('btn-whatsapp'); 
-                    btnResgate.textContent = '🎉 RESGATE SEU PRÊMIO GRÁTIS AGORA! 🎉';
-                    
-                    btnResgate.addEventListener('click', function() {
-                        if (confirm('Ao resgatar, seus selos serão zerados e uma mensagem será enviada ao WhatsApp. Deseja continuar?')) {
-                            // Código de resgate simples para verificação manual
-                            const codigoResgate = 'DT' + Math.floor(Date.now() / 1000); 
-                            const mensagem = `Olá! Quero resgatar minha Salada de Frutas GRÁTIS do Cartão Fidelidade. Meu código de resgate é: ${codigoResgate}`;
-                            const urlWhatsApp = `https://wa.me/${phone}?text=${encodeURIComponent(mensagem)}`;
-                            
-                            // Zera os selos no LocalStorage
-                            resetFidelidadeSelos();
+            text += `\n\nAguardando a confirmação do pedido e o cálculo da taxa de entrega.\n\n`; 
+            text += `*Obrigado!*`; 
+            text += `\n\n*Valor Total R$ ${total.toFixed(2).replace('.', ',')}*`;
 
-                            // Abre o WhatsApp
-                            window.open(urlWhatsApp, '_blank');
-                            
-                            // Redireciona de volta ao menu após o resgate
-                            setTimeout(() => {
-                               handlePageTransition('index.html');
-                            }, 1000);
-                        }
-                    });
-                }
-            }
-        }
+            return text;
+        };
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.classList.add('loaded');
-            loadAndDisplayOrder();
-        });
-    </script>
-    
-    </body>
+        // ======================================================
+        // FUNÇÃO loadAndDisplayOrder
+        // ======================================================
+        function loadAndDisplayOrder() {
+            
+            // 1. RECUPERAÇÃO DE DADOS
+            const pedidosJSON = localStorage.getItem('tropicanaPedidos');
+            const pedidos = pedidosJSON ? JSON.parse(pedidosJSON) : [];
+
+            // 2. REFERÊNCIAS DO DOM
+            const resumoPedidoDiv = document.getElementById('resumoPedido');
+            const totalAPagarDiv = document.getElementById('totalAPagar');
+            const nameInput = document.getElementById('nameInputFinal');
+            
+            // 3. RECUPERAÇÃO DE DADOS (Nome)
+            nameInput.value = localStorage.getItem('tropicanaName') || '';
+            
+            // 4. CÁLCULO E EXIBIÇÃO
+            let resumoTexto = '';
+            let totalPedido = 0;
+
+            if (pedidos.length === 0) {
+                resumoPedidoDiv.textContent = 'Nenhum pedido encontrado. Voltando ao menu...';
+                totalAPagarDiv.textContent = 'TOTAL: R$0,00';
+                handlePageTransition('index.html');
+                return;
+            }
+
+            // GERAÇÃO DE HTML
+            resumoTexto += pedidos.map((item, index) => {
+                const totalItem = item.total; 
+                
+                let linha = `<div class="resumo-item">`;
+                
+                linha += `<strong>1x Salada #${index + 1} (${item.tamanho.nome}):</strong> `;
+                
+                let detalhes = [];
+
+                if (item.fruits && item.fruits.length) detalhes.push(`Frutas: ${item.fruits.map(f => f.nome).join(', ')}`);
+                if (item.extras && item.extras.length) detalhes.push(`<span class="detail-label">Adic:</span> ${item.extras.map(e => e.nome).join(', ')}`);
+                if (item.acomp && item.acomp.length) detalhes.push(`<span class="detail-label">Acomp:</span> ${item.acomp.map(a => a.nome).join(', ')}`);
+                
+                const obs = item.observacoes || item.obs;
+                if (obs) detalhes.push(`<span class="detail-label">Obs:</span> ${obs}`);
+                
+                linha += detalhes.join(' <span class="separator">|</span> ');
+                
+                linha += ` - <strong class="item-price">${formatCurrency(totalItem)}</strong>`;
+                
+                linha += `</div>`; 
+
+                totalPedido += totalItem;
+                return linha;
+            }).join('');
+
+            resumoPedidoDiv.innerHTML = resumoTexto;
+            totalAPagarDiv.textContent = 'TOTAL: ' + formatCurrency(totalPedido);
+
+            // 5. LISTENERS
+            document.getElementById('enviarPedido').addEventListener('click', () => {
+                // 5.1 Validar campos
+                if (nameInput.value.trim() === '') {
+                    alert('Por favor, preencha seu nome.');
+                    return;
+                }
+                // 5.2 Salvar Nome
+                localStorage.setItem('tropicanaName', nameInput.value.trim());
+
+                const totalPedido = calcularTotalGeral();
+                // 5.3 Gera o texto para o WhatsApp com a nova formatação
+                let whatsappText = getWhatsappText(totalPedido);
+
+                // ✅ AÇÃO CRÍTICA: Adiciona o selo de fidelidade ANTES de limpar o storage
+                addFidelidadeSelo(); 
+                
+                // 5.4 REMOÇÃO DE EMOJIS (Para evitar caracteres estranhos na URL)
+                whatsappText = whatsappText.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uD83E[\uDC00-\uDFFF]|\u200D|\uFE0F/g, '');
+
+
+                // 5.5 Salva a mensagem no storage e redireciona para a tela de sucesso
+                localStorage.setItem('pedidoWhatsApp', whatsappText);
+
+                // 5.6 Limpa o localStorage de pedido
+                localStorage.removeItem('tropicanaPedidos');
+                localStorage.removeItem('tropicanaName');
+                
+                // 5.7 Redireciona para a tela de sucesso
+                handlePageTransition('sucesso.html'); 
+            });
+
+            // Listener para o botão de Voltar
+            document.getElementById('voltarMenu').addEventListener('click', () => {
+                localStorage.setItem('tropicanaName', nameInput.value.trim());
+                handlePageTransition('index.html');
+            });
+            
+            // Listener para persistir nome no localStorage
+            nameInput.addEventListener('input', () => localStorage.setItem('tropicanaName', nameInput.value.trim()));
+
+            // ======================================================
+            // LÓGICA DE EXIBIÇÃO DO CARTÃO FIDELIDADE
+            // ======================================================
+            const selosAtuais = getFidelidadeSelos();
+            const container = document.getElementById('selosContainer');
+            const statusText = document.getElementById('selosStatus');
+            const btnResgate = document.getElementById('btnResgate');
+
+            if (container) { 
+                // 1. Atualiza o status
+                statusText.innerHTML = `Você tem <strong>${selosAtuais}</strong> selos de ${MAX_SEALS}.`;
+
+                // 2. Desenha os selos
+                container.innerHTML = ''; // Limpa antes de desenhar
+                for (let i = 1; i <= MAX_SEALS; i++) {
+                    const seloDiv = document.createElement('div');
+                    seloDiv.className = 'selo';
+                    if (i <= selosAtuais) {
+                        seloDiv.classList.add('earned');
+                        seloDiv.textContent = '✓';
+                    } else {
+                        seloDiv.textContent = i;
+                    }
+                    container.appendChild(seloDiv);
+                }
+
+                // 3. Lógica do botão de resgate
+                if (selosAtuais >= MAX_SEALS) {
+                    btnResgate.disabled = false;
+                    btnResgate.classList.add('btn-whatsapp'); 
+                    btnResgate.textContent = '🎉 RESGATE SEU PRÊMIO GRÁTIS AGORA! 🎉';
+                    
+                    btnResgate.onclick = function() {
+                        if (confirm('Ao resgatar, seus selos serão zerados e uma mensagem será enviada ao WhatsApp. Deseja continuar?')) {
+                            // Código de resgate simples para verificação manual
+                            const codigoResgate = 'DT' + Math.floor(Date.now() / 1000); 
+                            const mensagem = `Olá! Quero resgatar minha Salada de Frutas GRÁTIS do Cartão Fidelidade. Meu código de resgate é: ${codigoResgate}`;
+                            const urlWhatsApp = `https://wa.me/${phone}?text=${encodeURIComponent(mensagem)}`;
+                            
+                            // Zera os selos no LocalStorage (usando a função segura)
+                            resetFidelidadeSelos();
+
+                            // Abre o WhatsApp
+                            window.open(urlWhatsApp, '_blank');
+                            
+                            // Redireciona de volta ao menu após o resgate
+                            setTimeout(() => {
+                               handlePageTransition('index.html');
+                            }, 1000);
+                        }
+                    };
+                } else {
+                    btnResgate.onclick = null; // Remove qualquer clique anterior
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Garante que a chave antiga (sem segurança) seja removida na primeira execução
+            localStorage.removeItem('fidelidade_selos'); 
+            
+            document.body.classList.add('loaded');
+            loadAndDisplayOrder();
+        });
+    </script>
+    
+    </body>
 </html>
